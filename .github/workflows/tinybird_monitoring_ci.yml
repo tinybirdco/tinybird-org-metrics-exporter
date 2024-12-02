@@ -18,7 +18,7 @@
 
     jobs:
         ci: # ci using branches from workspace 'tb_monitoring'
-          uses: tinybirdco/ci/.github/workflows/ci.yml@v3.1.0
+          uses: tinybirdco/ci/.github/workflows/ci.yml@v4.1.0
           with:
             data_project_dir: .
             tb_format: false
