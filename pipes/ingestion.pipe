@@ -1,0 +1,308 @@
+TOKEN "ingestion_endpoint_read" READ
+
+NODE ingestion_totals
+SQL >
+
+    SELECT
+        w.name as workspace_name,
+        event_type,
+        pipe_id,
+        pipe_name,
+        sum(executions) as executions_total,
+        sum(error_count) as errors_total,
+        sum(written_rows) as written_rows_total,
+        sum(written_bytes) as written_bytes_total,
+        sum(written_rows_quarantine) as written_rows_quarantine_total,
+        sum(written_bytes_quarantine) as written_bytes_quarantine_total,
+        sum(read_rows) as read_rows_total,
+        sum(read_bytes) as read_bytes_total
+    FROM organization.datasources_ops_stats as stats
+    join organization.workspaces as w ON w.workspace_id = stats.workspace_id
+    WHERE
+        event_type in [
+            'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
+        ]
+    group by workspace_id, w.name, event_type, pipe_id, pipe_name
+
+
+
+NODE ingestion_latency_5m
+SQL >
+
+    SELECT
+        w.name as workspace_name,
+        event_type,
+        pipe_name,
+        AVG(elapsed_time) AS avg_latency,
+        quantile(0.9)(elapsed_time) AS p90_latency,
+        quantile(0.95)(elapsed_time) AS p95_latency,
+        quantile(0.99)(elapsed_time) AS p99_latency
+    FROM organization.datasources_ops_log as log
+    join organization.workspaces as w ON w.workspace_id = log.workspace_id
+    WHERE timestamp >= now() - INTERVAL 5 MINUTE
+    AND event_type in [
+            'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
+        ]
+    GROUP BY workspace_id, w.name, event_type, pipe_id, pipe_name
+
+
+
+NODE ingestion_latency_30m
+SQL >
+
+    SELECT
+        w.name as workspace_name,
+        event_type,
+        pipe_name,
+        AVG(elapsed_time) AS avg_latency,
+        quantile(0.9)(elapsed_time) AS p90_latency,
+        quantile(0.95)(elapsed_time) AS p95_latency,
+        quantile(0.99)(elapsed_time) AS p99_latency
+    FROM organization.datasources_ops_log as log
+    join organization.workspaces as w ON w.workspace_id = log.workspace_id
+    WHERE timestamp >= now() - INTERVAL 30 MINUTE
+    AND event_type in [
+            'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
+        ]
+    GROUP BY workspace_id, w.name, event_type, pipe_id, pipe_name
+
+
+
+NODE ingestion_latency_1h
+SQL >
+
+    SELECT
+        w.name as workspace_name,
+        event_type,
+        pipe_name,
+        AVG(elapsed_time) AS avg_latency,
+        quantile(0.9)(elapsed_time) AS p90_latency,
+        quantile(0.95)(elapsed_time) AS p95_latency,
+        quantile(0.99)(elapsed_time) AS p99_latency
+    FROM organization.datasources_ops_log as log
+    join organization.workspaces as w ON w.workspace_id = log.workspace_id
+    WHERE timestamp >= now() - INTERVAL 1 HOUR
+    AND event_type in [
+            'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
+        ]
+    GROUP BY workspace_id, w.name, event_type, pipe_id, pipe_name
+
+
+
+NODE ingestion_latency_24h
+SQL >
+
+    SELECT
+        w.name as workspace_name,
+        event_type,
+        pipe_name,
+        AVG(elapsed_time) AS avg_latency,
+        quantile(0.9)(elapsed_time) AS p90_latency,
+        quantile(0.95)(elapsed_time) AS p95_latency,
+        quantile(0.99)(elapsed_time) AS p99_latency
+    FROM organization.datasources_ops_log as log
+    join organization.workspaces as w ON w.workspace_id = log.workspace_id
+    WHERE timestamp >= now() - INTERVAL 24 HOUR
+    AND event_type in [
+            'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
+        ]
+    GROUP BY workspace_id, w.name, event_type, pipe_id, pipe_name
+
+
+
+NODE ingestion_prometheus
+SQL >
+
+    sELECT
+        'ingestion_total' as name,
+        'counter' as type,
+        'total of ingestion executions' as help,
+        toFloat64(executions_total) as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_totals
+    UNION ALL
+    SELECT
+        'ingestion_errors_total' as name,
+        'counter' as type,
+        'total of ingestion errors' as help,
+        toFloat64(errors_total) as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_totals
+    UNION ALL
+    SELECT
+        'ingestion_written_rows_total' as name,
+        'counter' as type,
+        'total of ingestion rows written' as help,
+        toFloat64(written_rows_total) as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_totals
+    UNION ALL
+    SELECT
+        'ingestion_written_bytes_total' as name,
+        'counter' as type,
+        'total of ingestion bytes written' as help,
+        toFloat64(written_bytes_total) as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_totals
+    UNION ALL
+    SELECT
+        'ingestion_read_rows_total' as name,
+        'counter' as type,
+        'total of ingestion rows read' as help,
+        toFloat64(read_rows_total) as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_totals
+    UNION ALL
+    SELECT
+        'ingestion_read_bytes_total' as name,
+        'counter' as type,
+        'total of ingestion bytes read' as help,
+        toFloat64(read_bytes_total) as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_totals
+    UNION ALL
+    SELECT
+        'ingestion_written_rows_quarantine_total' as name,
+        'counter' as type,
+        'total of ingestion quarantine rows written' as help,
+        toFloat64(written_rows_quarantine_total) as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_totals
+    UNION ALL
+    SELECT
+        'ingestion_written_bytes_quarantine_total' as name,
+        'counter' as type,
+        'total of ingestion quarantine bytes written' as help,
+        toFloat64(written_bytes_quarantine_total) as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_totals
+    UNION ALL
+    SELECT
+        'ingestion_latency_avg_5m' as name,
+        'gauge' as type,
+        'average of ingestion latency in last 5 minutes' as help,
+        avg_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_5m
+    UNION ALL
+    SELECT
+        'ingestion_latency_p90_5m' as name,
+        'gauge' as type,
+        'p90 of ingestion latency in last 5 minutes' as help,
+        p90_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_5m
+    UNION ALL
+    SELECT
+        'ingestion_latency_p95_5m' as name,
+        'gauge' as type,
+        'p95 of ingestion latency in last 5 minutes' as help,
+        p95_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_5m
+    UNION ALL
+    SELECT
+        'ingestion_latency_p99_5m' as name,
+        'gauge' as type,
+        'p99 of ingestion latency in last 5 minutes' as help,
+        p99_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_5m
+    UNION ALL
+    SELECT
+        'ingestion_latency_avg_30m' as name,
+        'gauge' as type,
+        'average of ingestion latency in last 30 minutes' as help,
+        avg_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_30m
+    UNION ALL
+    SELECT
+        'ingestion_latency_p90_30m' as name,
+        'gauge' as type,
+        'p90 of ingestion latency in last 30 minutes' as help,
+        p90_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_30m
+    UNION ALL
+    SELECT
+        'ingestion_latency_p95_30m' as name,
+        'gauge' as type,
+        'p95 of ingestion latency in last 30 minutes' as help,
+        p95_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_30m
+    UNION ALL
+    SELECT
+        'ingestion_latency_p99_30m' as name,
+        'gauge' as type,
+        'p99 of ingestion latency in last 30 minutes' as help,
+        p99_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_30m
+    UNION ALL
+    SELECT
+        'ingestion_latency_avg_1h' as name,
+        'gauge' as type,
+        'average of ingestion latency in last hour' as help,
+        avg_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_1h
+    UNION ALL
+    SELECT
+        'ingestion_latency_p90_1h' as name,
+        'gauge' as type,
+        'p90 of ingestion latency in last hour' as help,
+        p90_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_1h
+    UNION ALL
+    SELECT
+        'ingestion_latency_p95_1h' as name,
+        'gauge' as type,
+        'p95 of ingestion latency in last hour' as help,
+        p95_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_1h
+    UNION ALL
+    SELECT
+        'ingestion_latency_p99_1h' as name,
+        'gauge' as type,
+        'p99 of ingestion latency in last hour' as help,
+        p99_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_1h
+    UNION ALL
+    SELECT
+        'ingestion_latency_avg_24h' as name,
+        'gauge' as type,
+        'average of ingestion latency in last 24 hours' as help,
+        avg_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_24h
+    UNION ALL
+    SELECT
+        'ingestion_latency_p90_24h' as name,
+        'gauge' as type,
+        'p90 of ingestion latency in last 24 hours' as help,
+        p90_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_24h
+    UNION ALL
+    SELECT
+        'ingestion_latency_p95_24h' as name,
+        'gauge' as type,
+        'p95 of ingestion latency in last 24 hours' as help,
+        p95_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_24h
+    UNION ALL
+    SELECT
+        'ingestion_latency_p99_24h' as name,
+        'gauge' as type,
+        'p99 of ingestion latency in last 24 hours' as help,
+        p99_latency as value,
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+    FROM ingestion_latency_24h
+
+
