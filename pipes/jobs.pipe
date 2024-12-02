@@ -1,3 +1,5 @@
+TOKEN "jobs_endpoint_read" READ
+
 NODE jobs_stats
 SQL >
 
@@ -11,7 +13,7 @@ SQL >
 
 
 
-NODE jobs_1
+NODE jobs_prometheus
 SQL >
 
     SELECT
