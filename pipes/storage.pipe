@@ -1,0 +1,60 @@
+TOKEN "storage_endpoint_read" READ
+
+NODE storage_stats
+SQL >
+
+    select workspace_id, datasource_name, sum(bytes) as bytes, sum(rows) as rows, sum(bytes_quarantine) as bytes_quarantine, sum(rows_quarantine) as rows_quarantine 
+    from organization.datasources_storage as stats
+    where toStartOfHour(timestamp) = toStartOfHour(now())
+    group by workspace_id, datasource_id, datasource_name
+
+
+
+NODE storage_union
+SQL >
+
+    SELECT
+        'rows' as name,
+        'gauge' as type,
+        'max number of rows last hour' as help,
+        rows as value,
+        workspace_id,
+        datasource_name
+    FROM storage_stats
+    union all
+    SELECT
+        'bytes' as name,
+        'gauge' as type,
+        'max number of bytes last hour' as help,
+        bytes as value,
+        workspace_id,
+        datasource_name
+    FROM storage_stats
+    union all
+    SELECT
+        'rows_quarantine' as name,
+        'gauge' as type,
+        'max number of rows in quarantine last hour' as help,
+        rows_quarantine as value,
+        workspace_id,
+        datasource_name
+    FROM storage_stats
+    union all
+    SELECT
+        'bytes_quarantine' as name,
+        'gauge' as type,
+        'max number of bytes in quarantine last hour' as help,
+        bytes_quarantine as value,
+        workspace_id,
+        datasource_name
+    FROM storage_stats
+
+
+
+NODE storage_prometheus
+SQL >
+
+    SELECT name, type, help, value, map('workspace', w.name, 'datasource', datasource_name) as labels  FROM storage_union as s_union 
+    join organization.workspaces as w ON w.workspace_id = s_union.workspace_id
+
+
