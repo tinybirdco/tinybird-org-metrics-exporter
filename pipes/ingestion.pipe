@@ -118,7 +118,7 @@ SQL >
         'counter' as type,
         'total of ingestion executions' as help,
         toFloat64(executions_total) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals
     UNION ALL
     SELECT
@@ -126,7 +126,7 @@ SQL >
         'counter' as type,
         'total of ingestion errors' as help,
         toFloat64(errors_total) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals
     UNION ALL
     SELECT
@@ -134,7 +134,7 @@ SQL >
         'counter' as type,
         'total of ingestion rows written' as help,
         toFloat64(written_rows_total) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals
     UNION ALL
     SELECT
@@ -142,7 +142,7 @@ SQL >
         'counter' as type,
         'total of ingestion bytes written' as help,
         toFloat64(written_bytes_total) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals
     UNION ALL
     SELECT
@@ -150,7 +150,7 @@ SQL >
         'counter' as type,
         'total of ingestion rows read' as help,
         toFloat64(read_rows_total) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals
     UNION ALL
     SELECT
@@ -158,7 +158,7 @@ SQL >
         'counter' as type,
         'total of ingestion bytes read' as help,
         toFloat64(read_bytes_total) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals
     UNION ALL
     SELECT
@@ -166,7 +166,7 @@ SQL >
         'counter' as type,
         'total of ingestion quarantine rows written' as help,
         toFloat64(written_rows_quarantine_total) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals
     UNION ALL
     SELECT
@@ -174,7 +174,7 @@ SQL >
         'counter' as type,
         'total of ingestion quarantine bytes written' as help,
         toFloat64(written_bytes_quarantine_total) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals
     UNION ALL
     SELECT
@@ -182,7 +182,7 @@ SQL >
         'gauge' as type,
         'average of ingestion latency in last 5 minutes' as help,
         avg_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_5m
     UNION ALL
     SELECT
@@ -190,7 +190,7 @@ SQL >
         'gauge' as type,
         'p90 of ingestion latency in last 5 minutes' as help,
         p90_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_5m
     UNION ALL
     SELECT
@@ -198,7 +198,7 @@ SQL >
         'gauge' as type,
         'p95 of ingestion latency in last 5 minutes' as help,
         p95_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_5m
     UNION ALL
     SELECT
@@ -206,7 +206,7 @@ SQL >
         'gauge' as type,
         'p99 of ingestion latency in last 5 minutes' as help,
         p99_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_5m
     UNION ALL
     SELECT
@@ -214,7 +214,7 @@ SQL >
         'gauge' as type,
         'average of ingestion latency in last 30 minutes' as help,
         avg_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_30m
     UNION ALL
     SELECT
@@ -222,7 +222,7 @@ SQL >
         'gauge' as type,
         'p90 of ingestion latency in last 30 minutes' as help,
         p90_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_30m
     UNION ALL
     SELECT
@@ -230,7 +230,7 @@ SQL >
         'gauge' as type,
         'p95 of ingestion latency in last 30 minutes' as help,
         p95_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_30m
     UNION ALL
     SELECT
@@ -238,7 +238,7 @@ SQL >
         'gauge' as type,
         'p99 of ingestion latency in last 30 minutes' as help,
         p99_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_30m
     UNION ALL
     SELECT
@@ -246,7 +246,7 @@ SQL >
         'gauge' as type,
         'average of ingestion latency in last hour' as help,
         avg_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_1h
     UNION ALL
     SELECT
@@ -254,7 +254,7 @@ SQL >
         'gauge' as type,
         'p90 of ingestion latency in last hour' as help,
         p90_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_1h
     UNION ALL
     SELECT
@@ -262,7 +262,7 @@ SQL >
         'gauge' as type,
         'p95 of ingestion latency in last hour' as help,
         p95_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_1h
     UNION ALL
     SELECT
@@ -270,7 +270,7 @@ SQL >
         'gauge' as type,
         'p99 of ingestion latency in last hour' as help,
         p99_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_1h
     UNION ALL
     SELECT
@@ -278,7 +278,7 @@ SQL >
         'gauge' as type,
         'average of ingestion latency in last 24 hours' as help,
         avg_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_24h
     UNION ALL
     SELECT
@@ -286,7 +286,7 @@ SQL >
         'gauge' as type,
         'p90 of ingestion latency in last 24 hours' as help,
         p90_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_24h
     UNION ALL
     SELECT
@@ -294,7 +294,7 @@ SQL >
         'gauge' as type,
         'p95 of ingestion latency in last 24 hours' as help,
         p95_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_24h
     UNION ALL
     SELECT
@@ -302,7 +302,7 @@ SQL >
         'gauge' as type,
         'p99 of ingestion latency in last 24 hours' as help,
         p99_latency as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name)
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_24h
 
 
