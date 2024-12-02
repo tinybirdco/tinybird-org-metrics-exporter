@@ -14,7 +14,7 @@
           - master
     jobs:
       cd:  # deploy changes to workspace 'tb_monitoring'
-        uses: tinybirdco/ci/.github/workflows/cd.yml@v3.1.0
+        uses: tinybirdco/ci/.github/workflows/cd.yml@v4.1.0
         with:
           data_project_dir: .
         secrets:
