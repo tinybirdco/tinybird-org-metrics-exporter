@@ -110,6 +110,24 @@ SQL >
 
 
 
+NODE ingestion_kafka_ops_log_5m
+SQL >
+
+    SELECT
+        w.name as workspace_name,
+        topic,
+        sum(committed_messages) as committed_messages_5m,
+        sum(processed_messages) as processed_messages_5m,
+        sum(processed_bytes) as processed_bytes_5m,
+        quantile(0.99) (lag) as lag_5m,
+        countIf(msg_type != 'info' and msg_type != 'warning') as errors_5m
+    FROM organization.kafka_ops_log as log
+    join organization.workspaces as w ON w.workspace_id = log.workspace_id
+    where timestamp > now() - interval 5 minutes
+    group by workspace_id, workspace_name, topic
+
+
+
 NODE ingestion_prometheus
 SQL >
 
@@ -304,5 +322,45 @@ SQL >
         p99_latency as value,
         map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_24h
+    UNION ALL
+    SELECT
+        'kafka_committed_messages_5m' as name,
+        'gauge' as type,
+        'commited messages in last 5 minutes' as help,
+        toFloat64(committed_messages_5m) as value,
+        map('workspace', workspace_name, 'topic', topic) as labels
+    FROM ingestion_kafka_ops_log_5m
+    UNION ALL
+    SELECT
+        'kafka_processed_messages_5m' as name,
+        'gauge' as type,
+        'processed messages in last 5 minutes' as help,
+        toFloat64(processed_messages_5m) as value,
+        map('workspace', workspace_name, 'topic', topic) as labels
+    FROM ingestion_kafka_ops_log_5m
+    UNION ALL
+    SELECT
+        'kafka_processed_bytes_5m' as name,
+        'gauge' as type,
+        'processed bytes in last 5 minutes' as help,
+        toFloat64(processed_bytes_5m) as value,
+        map('workspace', workspace_name, 'topic', topic) as labels
+    FROM ingestion_kafka_ops_log_5m
+    UNION ALL
+    SELECT
+        'kafka_errors_5m' as name,
+        'gauge' as type,
+        'errors in kafka in last 5 minutes' as help,
+        toFloat64(errors_5m) as value,
+        map('workspace', workspace_name, 'topic', topic) as labels
+    FROM ingestion_kafka_ops_log_5m
+    UNION ALL
+    SELECT
+        'kafka_lag_p99_5m' as name,
+        'gauge' as type,
+        'kafka p99 lag in last 5 minutes' as help,
+        toFloat64(lag_5m) as value,
+        map('workspace', workspace_name, 'topic', topic) as labels
+    FROM ingestion_kafka_ops_log_5m
 
 
