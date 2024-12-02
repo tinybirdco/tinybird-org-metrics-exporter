@@ -1,0 +1,44 @@
+TOKEN "jobs_endpoint_read" READ
+
+NODE jobs_stats
+SQL >
+
+    SELECT w.name as workspace_name, job_type, status, count() total, 
+    avg(date_diff('seconds', created_at, updated_at)) as avg_duration,
+    quantile (0.99)(date_diff('seconds', created_at, updated_at)) as p99_duration
+    FROM organization.jobs_log as stats
+    join organization.workspaces as w ON w.workspace_id = stats.workspace_id
+    where created_at > now() - interval 48 hours
+    group by workspace_name, job_type, status
+
+
+
+NODE jobs_prometheus
+SQL >
+
+    SELECT
+        'jobs_total' as name,
+        'gauge' as type,
+        'total of jobs in last 48 hours' as help,
+        toFloat64(total) as value,
+        map('workspace', workspace_name, 'job_type', job_type, 'status', status) as labels
+    FROM jobs_stats
+    UNION ALL
+    SELECT
+        'jobs_duration_avg' as name,
+        'gauge' as type,
+        'average duration of jobs in last 48 hours' as help,
+        toFloat64(avg_duration) as value,
+        map('workspace', workspace_name, 'job_type', job_type, 'status', status) as labels
+    FROM jobs_stats
+    UNION ALL
+    SELECT
+        'jobs_duration_p99' as name,
+        'gauge' as type,
+        'p99 duration of jobs in last 48 hours' as help,
+        toFloat64(p99_duration) as value,
+        map('workspace', workspace_name, 'job_type', job_type, 'status', status) as labels
+    FROM jobs_stats
+
+
+
