@@ -14,7 +14,7 @@ NODE storage_union
 SQL >
 
     SELECT
-        'rows' as name,
+        'storage_rows' as name,
         'gauge' as type,
         'max number of rows last hour' as help,
         rows as value,
@@ -23,7 +23,7 @@ SQL >
     FROM storage_stats
     union all
     SELECT
-        'bytes' as name,
+        'storage_bytes' as name,
         'gauge' as type,
         'max number of bytes last hour' as help,
         bytes as value,
@@ -32,7 +32,7 @@ SQL >
     FROM storage_stats
     union all
     SELECT
-        'rows_quarantine' as name,
+        'storage_rows_quarantine' as name,
         'gauge' as type,
         'max number of rows in quarantine last hour' as help,
         rows_quarantine as value,
@@ -41,7 +41,7 @@ SQL >
     FROM storage_stats
     union all
     SELECT
-        'bytes_quarantine' as name,
+        'storage_bytes_quarantine' as name,
         'gauge' as type,
         'max number of bytes in quarantine last hour' as help,
         bytes_quarantine as value,
