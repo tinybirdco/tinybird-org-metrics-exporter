@@ -1,4 +1,4 @@
-TOKEN "organization_metrics_endpoint_read_4427" READ
+TOKEN "organization_metrics_endpoint_read" READ
 
 NODE organization_metrics_union
 SQL >
@@ -7,7 +7,9 @@ SQL >
     UNION ALL
     SELECT * from storage 
     UNION ALL
-    select * from jobs
+    SELECT * from jobs
+    UNION ALL
+    SELECT * FROM requests
 
 
 

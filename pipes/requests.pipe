@@ -1,0 +1,229 @@
+TOKEN "requests_endpoint_read" READ
+
+NODE requests_totals
+SQL >
+
+    SELECT
+        workspace_id,
+        pipe_id,
+        pipe_name,
+        sum(view_count) as views_total,
+        sum(error_count) as errors_total,
+        sum(read_rows_sum) as read_rows_total,
+        sum(read_bytes_sum) as read_bytes_total
+    FROM organization.pipe_stats
+    group by workspace_id, pipe_id, pipe_name
+
+
+
+NODE requests_5m
+SQL >
+
+    SELECT
+        workspace_id,
+        pipe_id,
+        pipe_name,
+        avg(duration) as duration_avg,
+        quantile(0.90)(duration) as duration_p90,
+        quantile(0.95)(duration) as duration_p95,
+        quantile(0.99)(duration) as duration_p99,
+        avg(cpu_time) as cpu_time_avg,
+        quantile(0.90)(cpu_time) as cpu_time_p90,
+        quantile(0.95)(cpu_time) as cpu_time_p95,
+        quantile(0.99)(cpu_time) as cpu_time_p99
+    FROM organization.pipe_stats_rt
+    where start_datetime > now() - interval 5 minutes
+    group by workspace_id, pipe_id, pipe_name
+
+
+
+NODE requests_totals_metrics
+SQL >
+
+    SELECT
+        workspace_id,
+        pipe_name,
+        arrayJoin(
+            [
+                map(
+                    'name',
+                    'requests_views_total',
+                    'type',
+                    'counter',
+                    'help',
+                    'total of pipe API views',
+                    'value',
+                    toString(views_total)
+                ),
+                map(
+                    'name',
+                    'requests_errors_total',
+                    'type',
+                    'counter',
+                    'help',
+                    'total of errors in requests',
+                    'value',
+                    toString(errors_total)
+                ),
+                map(
+                    'name',
+                    'requests_read_rows_total',
+                    'type',
+                    'counter',
+                    'help',
+                    'total of rows read by requests',
+                    'value',
+                    toString(read_rows_total)
+                ),
+                map(
+                    'name',
+                    'requests_read_bytes_total',
+                    'type',
+                    'counter',
+                    'help',
+                    'total of bytes read by requests',
+                    'value',
+                    toString(read_bytes_total)
+                ),
+                map(
+                    'name',
+                    'ingestion_read_rows_total',
+                    'type',
+                    'counter',
+                    'help',
+                    'total of ingestion rows read',
+                    'value',
+                    toString(read_rows_total)
+                ),
+                map(
+                    'name',
+                    'ingestion_read_bytes_total',
+                    'type',
+                    'counter',
+                    'help',
+                    'total of ingestion bytes read',
+                    'value',
+                    toString(read_bytes_total)
+                )
+            ]
+        ) as metric_requests_total
+    FROM requests_totals
+
+
+
+NODE requests_5m_metrics
+SQL >
+
+    SELECT
+        workspace_id,
+        pipe_name,
+        arrayJoin(
+            [
+              map(
+                    'name',
+                    'requests_latency_avg_5m',
+                    'type',
+                    'gauge',
+                    'help',
+                    'average latency for requests in last 5 minutes',
+                    'value',
+                    toString(duration_avg)
+                ),
+                map(
+                    'name',
+                    'requests_latency_p90_5m',
+                    'type',
+                    'gauge',
+                    'help',
+                    'p90 latency for requests in last 5 minutes',
+                    'value',
+                    toString(duration_p90)
+                ),
+                map(
+                    'name',
+                    'requests_latency_p95_5m',
+                    'type',
+                    'gauge',
+                    'help',
+                    'p95 latency for requests in last 5 minutes',
+                    'value',
+                    toString(duration_p95)
+                ),
+                map(
+                    'name',
+                    'requests_latency_p99_5m',
+                    'type',
+                    'gauge',
+                    'help',
+                    'p99 latency for requests in last 5 minutes',
+                    'value',
+                    toString(duration_p99)
+                ),
+                map(
+                    'name',
+                    'requests_cpu_time_avg_5m',
+                    'type',
+                    'gauge',
+                    'help',
+                    'average cpu_time for requests in last 5 minutes',
+                    'value',
+                    toString(cpu_time_avg)
+                ),
+                map(
+                    'name',
+                    'requests_cpu_time_p90_5m',
+                    'type',
+                    'gauge',
+                    'help',
+                    'p90 cpu_time for requests in last 5 minutes',
+                    'value',
+                    toString(cpu_time_p90)
+                ),
+                map(
+                    'name',
+                    'requests_cpu_time_p95_5m',
+                    'type',
+                    'gauge',
+                    'help',
+                    'p95 cpu_time for requests in last 5 minutes',
+                    'value',
+                    toString(cpu_time_p95)
+                ),
+                map(
+                    'name',
+                    'requests_latency_p99_5m',
+                    'type',
+                    'gauge',
+                    'help',
+                    'p99 cpu_time for requests in last 5 minutes',
+                    'value',
+                    toString(cpu_time_p99)
+                )  
+    ]) as metric_requests_5m
+    FROM requests_5m
+
+
+
+NODE requests_pre_prometheus
+SQL >
+
+    SELECT
+        workspace_id,
+        metric_requests_total['name'] as name,
+        metric_requests_total['type'] as type,
+        metric_requests_total['help'] as help,
+        toFloat64(metric_requests_total['value']) as value,
+        map('pipe', pipe_name) as labels
+    FROM requests_totals_metrics
+    UNION ALL
+    SELECT
+        workspace_id,
+        metric_requests_5m['name'] as name,
+        metric_requests_5m['type'] as type,
+        metric_requests_5m['help'] as help,
+        toFloat64(metric_requests_5m['value']) as value,
+        map('pipe', pipe_name) as labels
+    FROM requests_5m_metrics
+
+
+
