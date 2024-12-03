@@ -3,10 +3,11 @@ TOKEN "organization_metrics_endpoint_read_4427" READ
 NODE organization_metrics_union
 SQL >
 
+    SELECT * FROM ingestion
+    UNION ALL
     SELECT * from storage 
-    union all
+    UNION ALL
     select * from jobs
-
 
 
 
