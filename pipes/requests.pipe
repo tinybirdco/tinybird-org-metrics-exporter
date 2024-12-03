@@ -84,26 +84,6 @@ SQL >
                     'total of bytes read by requests',
                     'value',
                     toString(read_bytes_total)
-                ),
-                map(
-                    'name',
-                    'ingestion_read_rows_total',
-                    'type',
-                    'counter',
-                    'help',
-                    'total of ingestion rows read',
-                    'value',
-                    toString(read_rows_total)
-                ),
-                map(
-                    'name',
-                    'ingestion_read_bytes_total',
-                    'type',
-                    'counter',
-                    'help',
-                    'total of ingestion bytes read',
-                    'value',
-                    toString(read_bytes_total)
                 )
             ]
         ) as metric_requests_total
