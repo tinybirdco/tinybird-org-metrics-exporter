@@ -5,17 +5,14 @@ SQL >
 
     select
         workspace_id,
-        w.name as workspace_name,
         datasource_name,
         sum(bytes) as bytes,
         sum(rows) as rows,
         sum(bytes_quarantine) as bytes_quarantine,
         sum(rows_quarantine) as rows_quarantine
-    from organization.datasources_storage as stats
-    join organization.workspaces as w ON w.workspace_id = stats.workspace_id
+    from organization.datasources_storage
     where toStartOfHour(timestamp) = toStartOfHour(now())
-
-    group by workspace_id, workspace_name, datasource_id, datasource_name
+    group by workspace_id, datasource_id, datasource_name
 
 
 
@@ -23,7 +20,7 @@ NODE storage_metrics
 SQL >
 
     select
-            workspace_name,
+            workspace_id,
             datasource_name,
             arrayJoin(
                 [
@@ -73,15 +70,16 @@ SQL >
 
 
 
-NODE storage_prometheus
+NODE storage_pre_prometheus
 SQL >
 
     SELECT
+        workspace_id,
         metric['name'] as name,
         metric['type'] as type,
         metric['help'] as help,
         toFloat64(metric['value']) as value,
-        map('workspace', workspace_name, 'datasource', datasource_name) as labels
+        map('datasource', datasource_name) as labels
     FROM storage_metrics
 
 

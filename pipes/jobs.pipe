@@ -3,13 +3,17 @@ TOKEN "jobs_endpoint_read" READ
 NODE jobs_stats
 SQL >
 
-    SELECT w.name as workspace_name, job_type, status, count() total, 
-    avg(date_diff('seconds', created_at, updated_at)) as avg_duration,
-    quantile (0.99)(date_diff('seconds', created_at, updated_at)) as p99_duration
+    SELECT
+        workspace_id,
+        job_type,
+        status,
+        count() total,
+        avg(date_diff('seconds', created_at, updated_at)) as avg_duration,
+        quantile(0.99)
+        (date_diff('seconds', created_at, updated_at)) as p99_duration
     FROM organization.jobs_log as stats
-    join organization.workspaces as w ON w.workspace_id = stats.workspace_id
     where created_at > now() - interval 48 hours
-    group by workspace_name, job_type, status
+    group by workspace_id, job_type, status
 
 
 
@@ -17,7 +21,7 @@ NODE jobs_metrics
 SQL >
 
     SELECT
-        workspace_name,
+        workspace_id,
         job_type,
         status,
         arrayJoin(
@@ -58,15 +62,16 @@ SQL >
 
 
 
-NODE jobs_prometheus
+NODE jobs_pre_prometheus
 SQL >
 
     SELECT
+        workspace_id,
         metric['name'] as name,
         metric['type'] as type,
         metric['help'] as help,
         toFloat64(metric['value']) as value,
-        map('workspace', workspace_name, 'job_type', job_type, 'status', status) as labels
+        map('job_type', job_type, 'status', status) as labels
     FROM jobs_metrics
 
 

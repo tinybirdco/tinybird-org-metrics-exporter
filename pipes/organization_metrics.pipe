@@ -1,0 +1,21 @@
+TOKEN "organization_metrics_endpoint_read_4427" READ
+
+NODE organization_metrics_union
+SQL >
+
+    SELECT * from storage 
+    union all
+    select * from jobs
+
+
+
+
+NODE organization_metrics_prometheus
+SQL >
+
+    SELECT name, type, help, value, 
+    mapConcat(labels, map('workspace', w.name)) AS labels
+    FROM organization_metrics_union as metrics
+    join organization.workspaces as w ON w.workspace_id = metrics.workspace_id
+
+
