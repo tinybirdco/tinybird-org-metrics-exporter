@@ -4,7 +4,7 @@ NODE ingestion_totals
 SQL >
 
     SELECT
-        w.name as workspace_name,
+        workspace_id,
         event_type,
         pipe_id,
         pipe_name,
@@ -16,13 +16,12 @@ SQL >
         sum(written_bytes_quarantine) as written_bytes_quarantine_total,
         sum(read_rows) as read_rows_total,
         sum(read_bytes) as read_bytes_total
-    FROM organization.datasources_ops_stats as stats
-    join organization.workspaces as w ON w.workspace_id = stats.workspace_id
+    FROM organization.datasources_ops_stats
     WHERE
         event_type in [
             'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
         ]
-    group by workspace_id, w.name, event_type, pipe_id, pipe_name
+    group by workspace_id, event_type, pipe_id, pipe_name
 
 
 
@@ -30,20 +29,19 @@ NODE ingestion_latency_5m
 SQL >
 
     SELECT
-        w.name as workspace_name,
+        workspace_id,
         event_type,
         pipe_name,
         AVG(elapsed_time) AS avg_latency,
         quantile(0.9)(elapsed_time) AS p90_latency,
         quantile(0.95)(elapsed_time) AS p95_latency,
         quantile(0.99)(elapsed_time) AS p99_latency
-    FROM organization.datasources_ops_log as log
-    join organization.workspaces as w ON w.workspace_id = log.workspace_id
+    FROM organization.datasources_ops_log
     WHERE timestamp >= now() - INTERVAL 5 MINUTE
     AND event_type in [
             'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
         ]
-    GROUP BY workspace_id, w.name, event_type, pipe_id, pipe_name
+    GROUP BY workspace_id, event_type, pipe_id, pipe_name
 
 
 
@@ -51,24 +49,23 @@ NODE ingestion_kafka_ops_log_5m
 SQL >
 
     SELECT
-        w.name as workspace_name,
+        workspace_id,
         topic,
         sum(committed_messages) as committed_messages_5m,
         sum(processed_messages) as processed_messages_5m,
         sum(processed_bytes) as processed_bytes_5m,
         quantile(0.99) (lag) as lag_5m,
         countIf(msg_type != 'info' and msg_type != 'warning') as errors_5m
-    FROM organization.kafka_ops_log as log
-    join organization.workspaces as w ON w.workspace_id = log.workspace_id
+    FROM organization.kafka_ops_log
     where timestamp > now() - interval 5 minutes
-    group by workspace_id, workspace_name, topic
+    group by workspace_id, topic
 
 
 
 NODE ingestion_totals_metrics
 SQL >
 
-    SELECT workspace_name, event_type, pipe_name, arrayJoin(
+    SELECT workspace_id, event_type, pipe_name, arrayJoin(
                 [
                     map(
                         'name',
@@ -160,7 +157,7 @@ NODE ingestion_kafka_metrics
 SQL >
 
     SELECT
-        workspace_name,
+        workspace_id,
         topic,
         arrayJoin(
             [
@@ -224,7 +221,7 @@ NODE ingestion_latency_5m_metrics
 SQL >
 
     SELECT
-        workspace_name,
+        workspace_id,
         event_type,
         pipe_name,
         arrayJoin(
@@ -279,27 +276,30 @@ NODE ingestion_prometheus
 SQL >
 
     SELECT
+        workspace_id,
         metric_ingestion_total['name'] as name,
         metric_ingestion_total['type'] as type,
         metric_ingestion_total['help'] as help,
         toFloat64(metric_ingestion_total['value']) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
+        map('event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals_metrics
     UNION ALL
     SELECT
+        workspace_id,
         metric_ingestion_kafka['name'] as name,
         metric_ingestion_kafka['type'] as type,
         metric_ingestion_kafka['help'] as help,
         toFloat64(metric_ingestion_kafka['value']) as value,
-        map('workspace', workspace_name, 'topic', topic) as labels
+        map('topic', topic) as labels
     FROM ingestion_kafka_metrics
     UNION ALL
     SELECT
+        workspace_id,
         metric_ingestion_latency_5m['name'] as name,
         metric_ingestion_latency_5m['type'] as type,
         metric_ingestion_latency_5m['help'] as help,
         toFloat64(metric_ingestion_latency_5m['value']) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
+        map('event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_5m_metrics
 
 
