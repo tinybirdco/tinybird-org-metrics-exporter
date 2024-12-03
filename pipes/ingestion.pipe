@@ -275,7 +275,7 @@ SQL >
 
 
 
-NODE ingestion_prometheus_new
+NODE ingestion_prometheus
 SQL >
 
     SELECT
@@ -283,7 +283,7 @@ SQL >
         metric_ingestion_total['type'] as type,
         metric_ingestion_total['help'] as help,
         toFloat64(metric_ingestion_total['value']) as value,
-        map('workspace', workspace_name, 'event_type', event_type, 'pipe', 'pipe_name') as labels
+        map('workspace', workspace_name, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals_metrics
     UNION ALL
     SELECT
