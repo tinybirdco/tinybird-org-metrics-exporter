@@ -13,32 +13,60 @@ SQL >
 
 
 
+NODE jobs_metrics
+SQL >
+
+    SELECT
+        workspace_name,
+        job_type,
+        status,
+        arrayJoin(
+            [
+                map(
+                    'name',
+                    'jobs_total',
+                    'type',
+                    'gauge',
+                    'help',
+                    'total of jobs in last 48 hours',
+                    'value',
+                    toString(total)
+                ),
+                map(
+                    'name',
+                    'jobs_duration_avg',
+                    'type',
+                    'gauge',
+                    'help',
+                    'average duration of jobs in last 48 hours',
+                    'value',
+                    toString(avg_duration)
+                ),
+                 map(
+                    'name',
+                    'jobs_duration_p99',
+                    'type',
+                    'gauge',
+                    'help',
+                    'p99 duration of jobs in last 48 hours',
+                    'value',
+                    toString(p99_duration)
+                )
+            ]
+        ) as metric
+    FROM jobs_stats
+
+
+
 NODE jobs_prometheus
 SQL >
 
     SELECT
-        'jobs_total' as name,
-        'gauge' as type,
-        'total of jobs in last 48 hours' as help,
-        toFloat64(total) as value,
+        metric['name'] as name,
+        metric['type'] as type,
+        metric['help'] as help,
+        toFloat64(metric['value']) as value,
         map('workspace', workspace_name, 'job_type', job_type, 'status', status) as labels
-    FROM jobs_stats
-    UNION ALL
-    SELECT
-        'jobs_duration_avg' as name,
-        'gauge' as type,
-        'average duration of jobs in last 48 hours' as help,
-        toFloat64(avg_duration) as value,
-        map('workspace', workspace_name, 'job_type', job_type, 'status', status) as labels
-    FROM jobs_stats
-    UNION ALL
-    SELECT
-        'jobs_duration_p99' as name,
-        'gauge' as type,
-        'p99 duration of jobs in last 48 hours' as help,
-        toFloat64(p99_duration) as value,
-        map('workspace', workspace_name, 'job_type', job_type, 'status', status) as labels
-    FROM jobs_stats
-
+    FROM jobs_metrics
 
 
