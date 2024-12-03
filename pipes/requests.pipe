@@ -191,7 +191,7 @@ SQL >
                 ),
                 map(
                     'name',
-                    'requests_latency_p99_5m',
+                    'requests_cpu_time_p99_5m',
                     'type',
                     'gauge',
                     'help',
