@@ -5,14 +5,13 @@ SQL >
 
     SELECT
         workspace_id,
-        pipe_id,
         pipe_name,
         sum(view_count) as views_total,
         sum(error_count) as errors_total,
         sum(read_rows_sum) as read_rows_total,
         sum(read_bytes_sum) as read_bytes_total
     FROM organization.pipe_stats
-    group by workspace_id, pipe_id, pipe_name
+    group by workspace_id, pipe_name
 
 
 
@@ -21,7 +20,6 @@ SQL >
 
     SELECT
         workspace_id,
-        pipe_id,
         pipe_name,
         avg(duration) as duration_avg,
         quantile(0.90)(duration) as duration_p90,
@@ -33,7 +31,7 @@ SQL >
         quantile(0.99)(cpu_time) as cpu_time_p99
     FROM organization.pipe_stats_rt
     where start_datetime > now() - interval 5 minutes
-    group by workspace_id, pipe_id, pipe_name
+    group by workspace_id, pipe_name
 
 
 
