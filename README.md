@@ -28,9 +28,9 @@ A **Tinybird project** designed to monitor Tinybird usage across an organization
 #### 2. Deploy the Pipes  
 - Clone this repository and deploy the pipes located in the `pipes` folder into your selected workspace.  
 - Deployment options:
-  - **Tinybird CLI**: Use `tb push` to deploy the pipes.
+  - **[Tinybird CLI](https://www.tinybird.co/docs/cli/overview)**: Use `tb push` to deploy the pipes.
   - **Drag-and-Drop**: Upload the `datafiles` via the Tinybird UI.
-  - **CI/CD Integration**: Automate deployment for future updates. This repository includes a GitHub Actions workflow template.  
+  - **[CI/CD](https://www.tinybird.co/docs/production/continuous-integration) Integration**: Automate deployment for future updates. This repository includes a GitHub Actions workflow template.  
     > **Important**: Ensure you configure the following secrets in your GitHub repository:
     > - `tb_admin_token`: Your Tinybird workspace token.  
     > - `tb_host`: The Tinybird host (e.g., `api.tinybird.co`, or a region-specific host like `api.us-east.tinybird.co`).  
