@@ -1,6 +1,6 @@
 # Tinybird Organization Metrics Exporter
 
-A **Tinybird project** designed to monitor Tinybird usage across an organization. This project uses Tinybird's **Service Datasources** to aggregate and expose organizational metrics, exporting them in **Prometheus format** for easy integration with monitoring tools.
+A **Tinybird project** designed to monitor Tinybird usage across an organization. This project uses Tinybird's **[Service Datasources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources)** to aggregate and expose organizational metrics, exporting them in **Prometheus format** for easy integration with monitoring tools.
 
 ## Features
 
@@ -16,7 +16,7 @@ A **Tinybird project** designed to monitor Tinybird usage across an organization
 
 ### Prerequisites
 
-1. You must have a **Tinybird organization**.
+1. You must have a **[Tinybird organization](https://www.tinybird.co/docs/monitoring/organizations)**.
 2. You need to be an **admin of the organization** to obtain the **Organization Token**.
 
 ### Steps
