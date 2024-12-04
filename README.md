@@ -61,3 +61,6 @@ scrape_configs:
 
 
 Start monitoring your Tinybird organization effortlessly with Prometheus metrics! 🎉
+
+![Grafana dashboard example](./assets/img/grafana.png)
+
