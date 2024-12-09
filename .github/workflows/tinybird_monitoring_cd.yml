@@ -16,7 +16,7 @@
       cd:  # deploy changes to workspace 'tb_monitoring'
         uses: tinybirdco/ci/.github/workflows/cd.yml@v4.1.0
         with:
-          data_project_dir: .
+          data_project_dir: tinybird
         secrets:
           tb_admin_token: ${{ secrets.TB_MONITORING_ADMIN_TOKEN }}  # set the Workspace admin token in GitHub secrets
           tb_host: https://api.tinybird.co
