@@ -14,6 +14,8 @@ A **Tinybird project** designed to monitor Tinybird usage across an organization
 
 ## Setup
 
+
+
 ### Prerequisites
 
 1. You must have a **[Tinybird organization](https://www.tinybird.co/docs/monitoring/organizations)**.
@@ -21,21 +23,19 @@ A **Tinybird project** designed to monitor Tinybird usage across an organization
 
 ### Steps
 
-#### 1. Create or Select a Workspace  
-- Create a new **Workspace** in your Tinybird organization specifically for monitoring purposes (recommended for better organization).  
-- Alternatively, you can use an existing workspace.
 
-#### 2. Deploy the Pipes  
-- Clone this repository and deploy the pipes located in the `pipes` folder into your selected workspace.  
-- Deployment options:
-  - **[Tinybird CLI](https://www.tinybird.co/docs/cli/overview)**: Use `tb push` to deploy the pipes.
-  - **Drag-and-Drop**: Upload the `datafiles` in `/pipes` via the Tinybird UI.
-  - **[CI/CD](https://www.tinybird.co/docs/production/continuous-integration) Integration**: Automate deployment for future updates. This repository includes a GitHub Actions workflow template.  
-    > **Important**: Ensure you configure the following secrets in your GitHub repository:
-    > - `tb_admin_token`: Your Tinybird workspace token.  
-    > - `tb_host`: The Tinybird host (e.g., `api.tinybird.co`, or a region-specific host like `api.us-east.tinybird.co`).  
 
-#### 3. Use the Prometheus Endpoint  
+
+#### 1. Deploy to a Tinybird Workspace
+
+<p align="center">
+  <a href="https://app.tinybird.co?starter_kit=https://github.com/tinybirdco/tinybird-org-metrics-exporter">
+    <img width="300" src="https://img.shields.io/badge/Deploy%20to-Tinybird-25283d?style=flat&labelColor=25283d&color=27f795&logo=data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNTAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNTAwIDQyLjhsLTE1Ni4xLTQyLjgtNTQuOSAxMjIuN3pNMzUwLjcgMzQ1LjRsLTE0Mi45LTUxLjEtODMuOSAyMDUuN3oiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii42Ii8+PHBhdGggZD0iTTAgMjE5LjlsMzUwLjcgMTI1LjUgNTcuNS0yNjguMnoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" />
+  </a>
+</p>
+
+
+#### 2. Use the Prometheus Endpoint  
 - Access the Prometheus metrics endpoint at:  
 
 `https://api.tinybird.co/v0/pipes/organization_metrics.prometheus`
