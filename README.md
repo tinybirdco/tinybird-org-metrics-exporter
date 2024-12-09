@@ -19,7 +19,7 @@ A **Tinybird project** designed to monitor Tinybird usage across an organization
 ### Prerequisites
 
 1. You must have a **[Tinybird organization](https://www.tinybird.co/docs/monitoring/organizations)**.
-2. You need to be an **admin of the organization** to obtain the **Organization Token**.
+2. You need to be an **admin of the organization** to access [organization service datasources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources).
 
 ### Steps
 
@@ -42,7 +42,7 @@ A **Tinybird project** designed to monitor Tinybird usage across an organization
 
 
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
-- Use your **Organization Token** to authenticate requests.
+- Use **admin `user@domain` Token** of an Organization admin to authenticate requests.
 
 To scrape the Tinybird metrics endpoint, you can configure your `prometheus.yml` file as follows:
 
@@ -56,7 +56,7 @@ scrape_configs:
       - targets: 
         - 'api.tinybird.co'  # Adjust this for your region if necessary
     metrics_path: '/v0/pipes/organization_metrics.prometheus'
-    bearer_token: '<organization-token>'
+    bearer_token: '<admin-user-token>'
 ```
 
 
