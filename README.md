@@ -56,9 +56,23 @@ scrape_configs:
       - targets: 
         - 'api.tinybird.co'  # Adjust this for your region if necessary
     metrics_path: '/v0/pipes/organization_metrics.prometheus'
-    bearer_token: '<admin-user-token>'  # From an Organization admin
+    bearer_token: '<pipe-read-token>'  # With permissions for organization_metrics Pipe
 ```
 
+In case you use a different setup such as Datadog + OpenMetrics, you can use the following configuration:
+
+```yaml
+instances:
+  - prometheus_url: https://api.tinybird.co/v0/pipes/organization_metrics.prometheus?token=<pipe-read-token>
+    namespace: tinybird
+    metrics:
+      - "*"
+    tags:
+      - tinybird
+    max_returned_metrics: 10000 # Adjust this value as needed
+```
+
+Remember to replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region and use a `pipe-read-token` with permissions for the `organization_metrics` pipe.
 
 Start monitoring your Tinybird organization effortlessly with Prometheus metrics! 🎉
 
