@@ -42,7 +42,7 @@ A **Tinybird project** designed to monitor Tinybird usage across an organization
 
 
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
-- Use **admin `user@domain` Token** of an Organization admin or a token with read scope for `organization_metrics` pipe  to authenticate requests.
+- Use **admin `user@domain` Token** of an Organization admin to authenticate requests.
 
 To scrape the Tinybird metrics endpoint, you can configure your `prometheus.yml` file as follows:
 
@@ -56,14 +56,14 @@ scrape_configs:
       - targets: 
         - 'api.tinybird.co'  # Adjust this for your region if necessary
     metrics_path: '/v0/pipes/organization_metrics.prometheus'
-    bearer_token: '<pipe-read-token>'  # With permissions for organization_metrics Pipe
+    bearer_token: '<dmin-user-token>'  # From an Organization admin
 ```
 
 In case you use a different setup such as Datadog + OpenMetrics, you can use the following configuration:
 
 ```yaml
 instances:
-  - prometheus_url: https://api.tinybird.co/v0/pipes/organization_metrics.prometheus?token=<pipe-read-token>
+  - prometheus_url: https://api.tinybird.co/v0/pipes/organization_metrics.prometheus?token=<admin-user-token>
     namespace: tinybird
     metrics:
       - "*"
@@ -72,7 +72,7 @@ instances:
     max_returned_metrics: 10000 # Adjust this value as needed
 ```
 
-Remember to replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region and use a `pipe-read-token` with permissions for the `organization_metrics` pipe.
+Remember to replace `api.tinybird.co` with your Tinybird host if the Workspace is in a different region.
 
 Start monitoring your Tinybird organization effortlessly with Prometheus metrics! 🎉
 
