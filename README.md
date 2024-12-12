@@ -42,7 +42,7 @@ A **Tinybird project** designed to monitor Tinybird usage across an organization
 
 
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
-- Use **admin `user@domain` Token** of an Organization admin to authenticate requests.
+- Use **admin `user@domain` Token** of an Organization admin or a token with read scope for `organization_metrics` pipe  to authenticate requests.
 
 To scrape the Tinybird metrics endpoint, you can configure your `prometheus.yml` file as follows:
 
