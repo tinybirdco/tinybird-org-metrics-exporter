@@ -56,7 +56,7 @@ scrape_configs:
       - targets: 
         - 'api.tinybird.co'  # Adjust this for your region if necessary
     metrics_path: '/v0/pipes/organization_metrics.prometheus'
-    bearer_token: '<dmin-user-token>'  # From an Organization admin
+    bearer_token: '<admin-user-token>'  # From an Organization admin
 ```
 
 In case you use a different setup such as Datadog + OpenMetrics, you can use the following configuration:
