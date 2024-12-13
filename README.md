@@ -76,5 +76,22 @@ Remember to replace `api.tinybird.co` with your Tinybird host if the Workspace i
 
 Start monitoring your Tinybird organization effortlessly with Prometheus metrics! 🎉
 
+### Grafana quickstart
+
+There's a sample dashboard in Grafana that you can use to get started, see the [JSON file](./grafana/tinybird org metrics.json).
+
+To import the dashboard, you can use the following steps:
+
+1. Go to Grafana and click on the Dashboards menu.
+2. Select **New** => **Import**.
+3. Click on **Upload dashboard JSON file**.
+4. Select the [JSON file](./grafana/tinybird org metrics.json) and click **Upload**.
+5. Select the Prometheus datasource.
+6. Click **Import**.
+7. Done!
+
+- Note: The dashboard is not perfect, it's just a quickstart to get you started.
+- Note: It uses the Prometheus configuration in this repo, using as job name `tinybird_org_metrics`.
+
 ![Grafana dashboard example](./assets/img/grafana.png)
 
