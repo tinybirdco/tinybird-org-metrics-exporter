@@ -90,5 +90,8 @@ To import the dashboard, you can use the following steps:
 6. Click **Import**.
 7. Done!
 
+- Note: The dashboard is not perfect, it's just a quickstart to get you started.
+- Note: It uses the Prometheus configuration in this repo, using as job name `tinybird_org_metrics`.
+
 ![Grafana dashboard example](./assets/img/grafana.png)
 
