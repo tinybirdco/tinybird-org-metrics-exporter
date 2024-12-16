@@ -98,6 +98,20 @@ To import the dashboard, you can use the following steps:
 
 ### Datadog quickstart
 
+Add the following configuration to your OpenMetrics datadog agent `conf.yaml` file:
+
+```yaml
+instances:
+  - prometheus_url: 'https://api.tinybird.co/v0/pipes/organization_metrics.prometheus?token=<admin-user-token>'
+    namespace: tinybird_org_metrics
+    metrics:
+      - "*"
+    max_returned_metrics: 700000
+```
+
+- Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
+- Use **admin `user@domain` Token** of an Organization admin to authenticate requests.
+
 There's a sample dashboard in Datadog that you can use to get started, see the [JSON file](datadog/tinybird_org_metrics.json).
 
 To import the dashboard, you can use the following steps:
@@ -112,7 +126,6 @@ To import the dashboard, you can use the following steps:
 8. Done!
 
 - Note: The dashboard is not perfect, it's just a quickstart to get you started.
-- Note: It uses the OpenMetrics configuration in this repo, using as job name `tinybird_org_metrics`.
 
 ![Datadog dashboard example](./assets/img/datadog.png)
 
