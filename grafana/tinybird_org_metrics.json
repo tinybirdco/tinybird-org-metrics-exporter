@@ -114,17 +114,23 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 0
       },
       "id": 1,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -214,17 +220,23 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 13,
-        "x": 11,
+        "w": 12,
+        "x": 12,
         "y": 0
       },
       "id": 2,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -239,11 +251,11 @@
             "uid": "${DS_MIMIR}"
           },
           "disableTextWrap": false,
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by(workspace, event_type) (rate(ingestion_errors_total{job=\"tinybird_org_metrics\", workspace=~\"$workspace\", event_type=~\"$event\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
-          "legendFormat": "{{label_name}}",
+          "legendFormat": "{{workspace}}-{{event_type}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -314,17 +326,23 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 9
       },
       "id": 3,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -339,7 +357,7 @@
             "uid": "${DS_MIMIR}"
           },
           "disableTextWrap": false,
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by(workspace, event_type) (rate(ingestion_written_rows_total{job=\"tinybird_org_metrics\", workspace=~\"$workspace\", event_type=~\"$event\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
@@ -414,17 +432,23 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 13,
-        "x": 11,
+        "w": 12,
+        "x": 12,
         "y": 9
       },
       "id": 4,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -443,7 +467,7 @@
           "expr": "sum by(workspace, event_type) (rate(ingestion_written_bytes_total{job=\"tinybird_org_metrics\", workspace=~\"$workspace\", event_type=~\"$event\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
-          "legendFormat": "{{label_name}}",
+          "legendFormat": "{{workspace}}-{{event_type}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -514,17 +538,23 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 19
       },
       "id": 17,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -614,17 +644,23 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 11,
-        "x": 11,
+        "w": 12,
+        "x": 12,
         "y": 19
       },
       "id": 18,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -714,17 +750,23 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 29
       },
       "id": 5,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -831,17 +873,23 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 13,
-        "x": 11,
+        "w": 12,
+        "x": 12,
         "y": 29
       },
       "id": 6,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -860,7 +908,7 @@
           "expr": "storage_rows{job=\"tinybird_org_metrics\", workspace=~\"$workspace\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
-          "legendFormat": "{{workspace}}-p99",
+          "legendFormat": "{{workspace}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -917,7 +965,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -930,17 +979,23 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 41
       },
       "id": 7,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -1019,7 +1074,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1032,16 +1088,20 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 13,
-        "x": 11,
+        "w": 12,
+        "x": 12,
         "y": 41
       },
       "id": 9,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -1121,7 +1181,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1134,16 +1195,20 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 53
       },
       "id": 10,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -1223,7 +1288,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1236,17 +1302,23 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 13,
-        "x": 11,
+        "w": 12,
+        "x": 12,
         "y": 53
       },
       "id": 8,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -1344,7 +1416,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1357,17 +1430,23 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 65
       },
       "id": 11,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -1443,7 +1522,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1456,17 +1536,23 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 13,
-        "x": 11,
+        "w": 12,
+        "x": 12,
         "y": 65
       },
       "id": 12,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -1542,7 +1628,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1555,17 +1642,23 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 75
       },
       "id": 13,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -1584,7 +1677,7 @@
           "expr": "sum by(workspace, pipe) (rate(requests_read_rows_total{job=\"tinybird_org_metrics\", workspace=~\"$workspace\", pipe=~\"$pipe\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
-          "legendFormat": "{{label_name}}",
+          "legendFormat": "{{workspace}}-{{pipe}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -1641,7 +1734,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1654,17 +1748,23 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 13,
-        "x": 11,
+        "w": 12,
+        "x": 12,
         "y": 75
       },
       "id": 15,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -1757,7 +1857,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1770,17 +1871,23 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 87
       },
       "id": 14,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -1799,7 +1906,7 @@
           "expr": "sum by(workspace, pipe) (rate(requests_read_bytes_total{job=\"tinybird_org_metrics\", workspace=~\"$workspace\", pipe=~\"$pipe\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
-          "legendFormat": "{{label_name}}",
+          "legendFormat": "{{workspace}}-{{pipe}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -1856,7 +1963,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1869,17 +1977,23 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 13,
-        "x": 11,
+        "w": 12,
+        "x": 12,
         "y": 87
       },
       "id": 16,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "calcs": [
+            "sum",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -1997,8 +2111,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Tinybird org metrics",
+  "title": "OA org metrics",
   "uid": "fe5p52ak1ee4gd2",
-  "version": 27,
+  "version": 36,
   "weekStart": ""
 }

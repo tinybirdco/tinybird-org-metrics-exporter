@@ -82,16 +82,37 @@ There's a sample dashboard in Grafana that you can use to get started, see the [
 
 To import the dashboard, you can use the following steps:
 
-1. Go to Grafana and click on the Dashboards menu.
-2. Select **New** => **Import**.
-3. Click on **Upload dashboard JSON file**.
-4. Select the [JSON file](grafana/tinybird_org_metrics.json) and click **Upload**.
-5. Select the Prometheus datasource.
-6. Click **Import**.
+1. Go to Grafana and click on the Dashboards menu
+2. Select **New** => **Import**
+3. Click on **Upload dashboard JSON file**
+4. Select the [JSON file](grafana/tinybird_org_metrics.json) and click **Upload**
+5. Select the Prometheus datasource
+6. Click **Import**
 7. Done!
 
 - Note: The dashboard is not perfect, it's just a quickstart to get you started.
 - Note: It uses the Prometheus configuration in this repo, using as job name `tinybird_org_metrics`.
 
 ![Grafana dashboard example](./assets/img/grafana.png)
+
+
+### Datadog quickstart
+
+There's a sample dashboard in Datadog that you can use to get started, see the [JSON file](datadog/tinybird_org_metrics.json).
+
+To import the dashboard, you can use the following steps:
+
+1. Go to Datadog and click on the Dashboards menu
+2. Select **New Dashboard**
+3. Click on **New Dashboard** in the modal window
+4. Click the settings gear icon (⚙️)
+5. Select **Import Dashboard**
+6. Browse to the [JSON file](datadog/tinybird_org_metrics.json)
+7. Select **Yes, replace**
+8. Done!
+
+- Note: The dashboard is not perfect, it's just a quickstart to get you started.
+- Note: It uses the OpenMetrics configuration in this repo, using as job name `tinybird_org_metrics`.
+
+![Datadog dashboard example](./assets/img/datadog.png)
 
