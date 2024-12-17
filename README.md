@@ -1,12 +1,12 @@
 # Tinybird Organization Metrics Exporter
 
-A **Tinybird project** designed to monitor Tinybird usage across an organization. This project uses Tinybird's **[Service Datasources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources)** to aggregate and expose organizational metrics, exporting them in **Prometheus format** for easy integration with monitoring tools.
+Monitor Tinybird usage across your Tinybird organization. This project uses Tinybird's **[Service Data Sources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources)** to aggregate and publish organizational metrics as endpoints in [**Prometheus format**](https://www.tinybird.co/docs/guides/integrations/consume-api-endpoints-in-prometheus-format) for quick integration with common monitoring tools.
 
 ## Features
 
 - Includes a set of **Pipes** that consolidate and process organizational metrics.  
 - Exposes all key metrics through a **single Pipe Endpoint** in **Prometheus format** for streamlined monitoring.  
-- Provides essential insights to help you **monitor**, **detect anomalies**, and **set up alerts** in critical areas such as:  
+- Provides essential insights to help you **monitor your usage**, **detect anomalies**, and **set up alerts** in critical areas such as:  
   - **Data ingestion**: Track the volume and frequency of ingested data.  
   - **Pipe endpoint usage**: Analyze requests and identify unusual traffic patterns.  
   - **Storage**: Monitor storage usage to optimize resources and avoid limits.  
@@ -19,18 +19,15 @@ A **Tinybird project** designed to monitor Tinybird usage across an organization
 ### Prerequisites
 
 1. You must have a **[Tinybird organization](https://www.tinybird.co/docs/monitoring/organizations)**.
-2. You need to be an **admin of the organization** to access [organization service datasources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources).
+2. You need to be an **admin of the organization** to access [organization Service Data Sources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources).
 
 ### Steps
 
-
-
-
 #### 1. Deploy to a Tinybird Workspace
 
-<p align="center">
+<p align="left">
   <a href="https://app.tinybird.co?starter_kit=https://github.com/tinybirdco/tinybird-org-metrics-exporter">
-    <img width="300" src="https://img.shields.io/badge/Deploy%20to-Tinybird-25283d?style=flat&labelColor=25283d&color=27f795&logo=data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNTAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNTAwIDQyLjhsLTE1Ni4xLTQyLjgtNTQuOSAxMjIuN3pNMzUwLjcgMzQ1LjRsLTE0Mi45LTUxLjEtODMuOSAyMDUuN3oiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii42Ii8+PHBhdGggZD0iTTAgMjE5LjlsMzUwLjcgMTI1LjUgNTcuNS0yNjguMnoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" />
+    <img width="200" src="https://img.shields.io/badge/Deploy%20to-Tinybird-25283d?style=flat&labelColor=25283d&color=27f795&logo=data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNTAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNTAwIDQyLjhsLTE1Ni4xLTQyLjgtNTQuOSAxMjIuN3pNMzUwLjcgMzQ1LjRsLTE0Mi45LTUxLjEtODMuOSAyMDUuN3oiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii42Ii8+PHBhdGggZD0iTTAgMjE5LjlsMzUwLjcgMTI1LjUgNTcuNS0yNjguMnoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" />
   </a>
 </p>
 
@@ -59,7 +56,7 @@ scrape_configs:
     bearer_token: '<admin-user-token>'  # From an Organization admin
 ```
 
-In case you use a different setup such as Datadog + OpenMetrics, you can use the following configuration:
+If you use a different setup, such as Datadog + OpenMetrics, you can use the following configuration:
 
 ```yaml
 instances:
@@ -74,13 +71,13 @@ instances:
 
 Remember to replace `api.tinybird.co` with your Tinybird host if the Workspace is in a different region.
 
-Start monitoring your Tinybird organization effortlessly with Prometheus metrics! 🎉
+Start monitoring your Tinybird organization with Prometheus metrics! 🎉
 
-### Grafana quickstart
+### Grafana Quick Start
 
-There's a sample dashboard in Grafana that you can use to get started, see the [JSON file](grafana/tinybird_org_metrics.json).
+We've included a sample dashboard config for Grafana to help you get started, see the [JSON file](grafana/tinybird_org_metrics.json).
 
-To import the dashboard, you can use the following steps:
+Import the dashboard with the following steps:
 
 1. Go to Grafana and click on the Dashboards menu
 2. Select **New** => **Import**
@@ -90,15 +87,15 @@ To import the dashboard, you can use the following steps:
 6. Click **Import**
 7. Done!
 
-- Note: The dashboard is not perfect, it's just a quickstart to get you started.
-- Note: It uses the Prometheus configuration in this repo, using as job name `tinybird_org_metrics`.
+- Note: The dashboard is not perfect, it's just a starting point. Modify it as you need!
+- Note: The dashboard uses the Prometheus configuration in this repo, with the job name `tinybird_org_metrics`.
 
 ![Grafana dashboard example](./assets/img/grafana.png)
 
 
-### Datadog quickstart
+### Datadog Quick Start
 
-Add the following configuration to your OpenMetrics datadog agent `conf.yaml` file:
+Add the following configuration to your OpenMetrics Datadog agent `conf.yaml` file:
 
 ```yaml
 instances:
@@ -112,9 +109,9 @@ instances:
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
 - Use **admin `user@domain` Token** of an Organization admin to authenticate requests.
 
-There's a sample dashboard in Datadog that you can use to get started, see the [JSON file](datadog/tinybird_org_metrics.json).
+We've included a sample dashboard config for Datadog that you can use to get started, see the [JSON file](datadog/tinybird_org_metrics.json).
 
-To import the dashboard, you can use the following steps:
+Import the dashboard with the following steps:
 
 1. Go to Datadog and click on the Dashboards menu
 2. Select **New Dashboard**
@@ -125,7 +122,7 @@ To import the dashboard, you can use the following steps:
 7. Select **Yes, replace**
 8. Done!
 
-- Note: The dashboard is not perfect, it's just a quickstart to get you started.
+- Note: The dashboard is not perfect, it's just a starting point. Modify it as you need!
 
 ![Datadog dashboard example](./assets/img/datadog.png)
 
