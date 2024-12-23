@@ -60,10 +60,10 @@ instances:
 
 We've included a sample dashboard config for Datadog that you can use to get started, see the [JSON file](https://github.com/tinybirdco/tinybird-org-metrics-exporter/blob/main/datadog/tinybird_org_metrics.json).
 
-## 3. Learn more
+## 4. Learn more
 
 To learn more about this template check out the [README](https://github.com/tinybirdco/tinybird-org-metrics-exporter/blob/main/README.md).
 
-## 4. Support
+## 5. Support
 
 If you have any questions or need help, please reach out to us on [Slack](https://www.tinybird.co/join-our-slack-community) or [email](mailto:support@tinybird.co).
