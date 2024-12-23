@@ -34,6 +34,7 @@ scrape_configs:
     bearer_token: '<admin-user-token>'  # From an Organization admin
 ```
 
+
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
 - Use `admin user@domain Token` of an Organization admin to authenticate requests.
 
@@ -52,6 +53,7 @@ instances:
       - "*"
     max_returned_metrics: 700000
 ```
+
 
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
 - Use `admin user@domain Token` of an Organization admin to authenticate requests.
