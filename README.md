@@ -32,7 +32,16 @@ To deploy this template on Tinybird, click the following button:
 Access the Prometheus metrics endpoint at `https://api.tinybird.co/v0/pipes/organization_metrics.prometheus`.
 
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region. See [Regions and endpoints](https://www.tinybird.co/docs/api-reference#regions-and-endpoints).
-- Use the `user@domain` admin token of an Organization admin to authenticate requests.
+- **Token**: for a quick check in development, you can use the pre-existing *admin `user@domain` Token* of an Organization admin to authenticate requests. But for production, the creation of a *new token* with less permissions is recommended, including these scopes:
+```
+  PIPES:READ:organization_metrics
+  ORG_DATASOURCES:READ
+```
+- As of this writing, the `ORG_DATASOURCES:READ` is not available from UI, but you can create this new **prometheus_org_access** token using tokens API like this:
+```shell
+POST https://api.tinybird.co/v0/tokens/?name=prometheus_org_access&description=optional&scope=PIPES:READ:organization_metrics&scope=ORG_DATASOURCES:READ
+```
+
 
 To scrape the Tinybird metrics endpoint, you can configure your `prometheus.yml` file as follows:
 
