@@ -36,7 +36,7 @@ scrape_configs:
 
 
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
-- Use `admin user@domain Token` of an Organization admin to authenticate requests.
+- Use `admin user@domain Token` of an Organization admin to authenticate requests. Find it in the [Tinybird dashboard](https://app.tinybird.co/tokens).
 
 We've included a sample dashboard config for Grafana to help you get started, see the [JSON file](https://github.com/tinybirdco/tinybird-org-metrics-exporter/blob/main/grafana/tinybird_org_metrics.json).
 
@@ -56,7 +56,7 @@ instances:
 
 
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
-- Use `admin user@domain Token` of an Organization admin to authenticate requests.
+- Use `admin user@domain Token` of an Organization admin to authenticate requests. Find it in the [Tinybird dashboard](https://app.tinybird.co/tokens).
 
 We've included a sample dashboard config for Datadog that you can use to get started, see the [JSON file](https://github.com/tinybirdco/tinybird-org-metrics-exporter/blob/main/datadog/tinybird_org_metrics.json).
 
