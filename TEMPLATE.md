@@ -1,24 +1,10 @@
-Monitor Tinybird usage across your Tinybird organization. 
+This Org Metrics Exporter template uses Tinybird's [Service Data Sources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources) to aggregate and publish organizational metrics as endpoints in [Prometheus format](https://www.tinybird.co/docs/guides/integrations/consume-api-endpoints-in-prometheus-format) for quick integration with common monitoring tools.
 
-This template uses Tinybird's [Service Data Sources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources) to aggregate and publish organizational metrics as endpoints in [Prometheus format](https://www.tinybird.co/docs/guides/integrations/consume-api-endpoints-in-prometheus-format) for quick integration with common monitoring tools.
-
-Once deployed it provides essential insights to help you monitor your usage, detect anomalies, and set up alerts in critical areas such as:  
-  - Data ingestion: Track the volume and frequency of ingested data
-  - Pipe endpoint usage: Analyze requests and identify unusual traffic patterns
-  - Storage: Monitor storage usage to optimize resources and avoid limits
-  - Jobs: Keep track of the status and performance of scheduled jobs
-
-
-## 0. Prerequisites
-
-1. You must have a [Tinybird organization](https://www.tinybird.co/docs/monitoring/organizations)
-2. You need to be an admin of the organization to access [organization Service Data Sources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources)
-
-## 1. Set up the project
+## Set up the project
 
 Fork the GitHub repository and deploy the data project to Tinybird.
 
-## 2. Grafana and Prometheus quick start
+## Grafana and Prometheus
 
 To scrape the Tinybird metrics endpoint, you can configure your `prometheus.yml` file as follows:
 
@@ -35,13 +21,12 @@ scrape_configs:
 ```
 
 
-- Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
+- Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region. See [Regions and endpoints](https://www.tinybird.co/docs/api-reference#regions-and-endpoints).  
 - Use `admin user@domain Token` of an Organization admin to authenticate requests. Find it in the [Tinybird dashboard](https://app.tinybird.co/tokens).
 
 We've included a sample dashboard config for Grafana to help you get started, see the [JSON file](https://github.com/tinybirdco/tinybird-org-metrics-exporter/blob/main/grafana/tinybird_org_metrics.json).
 
-
-## 3. Datadog and OpenMetrics quick start
+## Datadog and OpenMetrics
 
 Add the following configuration to your OpenMetrics Datadog agent `conf.yaml` file:
 
@@ -55,15 +40,7 @@ instances:
 ```
 
 
-- Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region.  
+- Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region. See [Regions and endpoints](https://www.tinybird.co/docs/api-reference#regions-and-endpoints).  
 - Use `admin user@domain Token` of an Organization admin to authenticate requests. Find it in the [Tinybird dashboard](https://app.tinybird.co/tokens).
 
 We've included a sample dashboard config for Datadog that you can use to get started, see the [JSON file](https://github.com/tinybirdco/tinybird-org-metrics-exporter/blob/main/datadog/tinybird_org_metrics.json).
-
-## 4. Learn more
-
-To learn more about this template check out the [README](https://github.com/tinybirdco/tinybird-org-metrics-exporter/blob/main/README.md).
-
-## 5. Support
-
-If you have any questions or need help, please reach out to us on [Slack](https://www.tinybird.co/join-our-slack-community) or [email](mailto:support@tinybird.co).
