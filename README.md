@@ -80,7 +80,7 @@ The dashboard uses the Prometheus configuration in this repo, with the job name 
 
 ![Grafana dashboard example](./assets/img/grafana.png)
 
-### Datadog suick start
+### Datadog quick start
 
 Add the following configuration to your OpenMetrics Datadog agent `conf.yaml` file:
 
