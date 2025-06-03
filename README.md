@@ -23,9 +23,15 @@ This project uses Tinybird's [Service Data Sources](https://www.tinybird.co/docs
 
 #### Deploy to a Tinybird Workspace
 
-To deploy this template on Tinybird, click the following button:
+To deploy this template on Tinybird, run:
 
-[![Deploy to Tinybird](https://cdn.tinybird.co/static/images/Tinybird-Deploy-Button.svg)](https://app.tinybird.co?starter_kit=https://github.com/tinybirdco/tinybird-org-metrics-exporter)
+```bash
+# select or create a new workspace
+tb login
+
+# deploy the template
+tb --cloud deploy --template https://github.com/tinybirdco/tinybird-org-metrics-exporter/tree/main/tinybird
+```
 
 #### Use the Prometheus endpoint  
 

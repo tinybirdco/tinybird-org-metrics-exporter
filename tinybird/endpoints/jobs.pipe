@@ -74,4 +74,4 @@ SQL >
         map('job_type', job_type, 'status', status) as labels
     FROM jobs_metrics
 
-
+TYPE endpoint
