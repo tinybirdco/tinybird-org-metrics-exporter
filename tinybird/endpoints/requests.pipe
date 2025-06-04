@@ -203,5 +203,5 @@ SQL >
         map('pipe', pipe_name) as labels
     FROM requests_5m_metrics
 
-
+TYPE endpoint
 

@@ -2,7 +2,13 @@ This Org Metrics Exporter template uses Tinybird's [Service Data Sources](https:
 
 ## Set up the project
 
-Fork the GitHub repository and deploy the data project to Tinybird.
+```bash
+# select or create a new workspace
+tb login
+
+# deploy the template
+tb --cloud deploy --template https://github.com/tinybirdco/tinybird-org-metrics-exporter/tree/main/tinybird
+```
 
 ## Grafana and Prometheus
 

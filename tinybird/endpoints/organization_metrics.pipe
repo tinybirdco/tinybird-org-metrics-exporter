@@ -21,4 +21,4 @@ SQL >
     FROM organization_metrics_union as metrics
     join organization.workspaces as w ON w.workspace_id = metrics.workspace_id
 
-
+TYPE endpoint

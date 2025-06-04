@@ -302,4 +302,4 @@ SQL >
         map('event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_5m_metrics
 
-
+TYPE endpoint
