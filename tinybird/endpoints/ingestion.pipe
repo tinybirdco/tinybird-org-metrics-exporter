@@ -1,4 +1,26 @@
 TOKEN "ingestion_endpoint_read" READ
+DESCRIPTION >
+    Returns ingestion metrics:
+        ingestion_total
+        ingestion_errors_total
+        ingestion_written_rows_total
+        ingestion_written_bytes_total
+        ingestion_read_rows_total
+        ingestion_read_bytes_total
+        ingestion_written_rows_quarantine_total
+        ingestion_written_bytes_quarantine_total
+        kafka_committed_messages_5m
+        kafka_processed_messages_5m
+        kafka_processed_bytes_5m
+        kafka_errors_5m
+        kafka_lag_p99_5m
+        ingestion_latency_avg_5m
+        ingestion_latency_p90_5m
+        ingestion_latency_p95_5m
+        ingestion_latency_p99_5m 
+    for a tinybird organization, grouped by workspace_id, event_type and pipe name
+    event_type can be 'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
+    Use from_datetime to get metrics since a date time, otherwise it returns last 5 minutes, except ingestion totals, which always sums all values
 
 NODE ingestion_totals
 SQL >
@@ -27,7 +49,7 @@ SQL >
 
 NODE ingestion_latency_5m
 SQL >
-
+    %
     SELECT
         workspace_id,
         event_type,
@@ -37,7 +59,11 @@ SQL >
         quantile(0.95)(elapsed_time) AS p95_latency,
         quantile(0.99)(elapsed_time) AS p99_latency
     FROM organization.datasources_ops_log
-    WHERE timestamp >= now() - INTERVAL 5 MINUTE
+    {% if defined(from_datetime) %}
+        WHERE timestamp >= toDateTime({{DateTime(from_datetime, description="timestamp >= from_datetime. Format YYYY-mm-DD HH:MM:ss")}})
+    {% else %}
+        WHERE timestamp >= now() - INTERVAL 5 MINUTE
+    {% end %}
     AND event_type in [
             'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
         ]
@@ -47,7 +73,7 @@ SQL >
 
 NODE ingestion_kafka_ops_log_5m
 SQL >
-
+    %
     SELECT
         workspace_id,
         topic,
@@ -57,7 +83,11 @@ SQL >
         quantile(0.99) (lag) as lag_5m,
         countIf(msg_type != 'info' and msg_type != 'warning') as errors_5m
     FROM organization.kafka_ops_log
-    where timestamp > now() - interval 5 minutes
+    {% if defined(from_datetime) %}
+        WHERE timestamp >= toDateTime({{DateTime(from_datetime, description="timestamp >= from_datetime. Format YYYY-mm-DD HH:MM:ss")}})
+    {% else %}
+        WHERE timestamp >= now() - INTERVAL 5 MINUTE
+    {% end %}
     group by workspace_id, topic
 
 
