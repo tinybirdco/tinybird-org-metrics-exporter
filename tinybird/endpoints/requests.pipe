@@ -1,5 +1,24 @@
 TOKEN "requests_endpoint_read" READ
 
+DESCRIPTION >
+    Returns requests to pipe endpoints metrics:
+        requests_views_total
+        requests_errors_total
+        requests_read_rows_total
+        requests_read_bytes_total
+        requests_latency_avg_5m
+        requests_latency_p90_5m
+        requests_latency_p95_5m
+        requests_latency_p99_5m
+        requests_cpu_time_avg_5m
+        requests_cpu_time_p90_5m
+        requests_cpu_time_p95_5m
+        requests_cpu_time_p99_5m
+    for a tinybird organization, grouped by workspace_id and pipe name
+    Use from_datetime to get metrics since a date time, otherwise it returns last 5 minutes, except requests totals, which always sums all values
+    In the response each metric has a description of what it means in the help column
+    The format is compatible with Prometheus
+
 NODE requests_totals
 SQL >
 
@@ -17,7 +36,7 @@ SQL >
 
 NODE requests_5m
 SQL >
-
+    %
     SELECT
         workspace_id,
         pipe_name,
@@ -30,7 +49,11 @@ SQL >
         quantile(0.95)(cpu_time) as cpu_time_p95,
         quantile(0.99)(cpu_time) as cpu_time_p99
     FROM organization.pipe_stats_rt
-    where start_datetime > now() - interval 5 minutes
+    {% if defined(from_datetime) %}
+        WHERE start_datetime >= toDateTime({{DateTime(from_datetime, description="timestamp >= from_datetime. Format YYYY-mm-DD HH:MM:ss")}})
+    {% else %}
+        WHERE start_datetime >= now() - INTERVAL 5 MINUTE
+    {% end %}
     group by workspace_id, pipe_name
 
 

@@ -1,5 +1,15 @@
 TOKEN "storage_endpoint_read" READ
 
+DESCRIPTION > 
+    Returns storage metrics:
+        storage_rows
+        storage_bytes
+        storage_rows_quarantine
+        storage_bytes_quarantine
+    for a tinybird organization, grouped by workspace_id and datasource name
+    In the response each metric has a description of what it means in the help column
+    The format is compatible with Prometheus
+
 NODE storage_stats
 SQL >
 
