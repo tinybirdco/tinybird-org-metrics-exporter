@@ -36,7 +36,7 @@ SQL >
 
 NODE requests_5m
 SQL >
-
+    %
     SELECT
         workspace_id,
         pipe_name,
