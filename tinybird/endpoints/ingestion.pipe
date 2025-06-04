@@ -21,6 +21,7 @@ DESCRIPTION >
     for a tinybird organization, grouped by workspace_id, event_type and pipe name
     event_type can be 'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
     Use from_datetime to get metrics since a date time, otherwise it returns last 5 minutes, except ingestion totals, which always sums all values
+    In the response each metric has a description of what it means in the help column
 
 NODE ingestion_totals
 SQL >

@@ -1,8 +1,18 @@
 TOKEN "jobs_endpoint_read" READ
 
+DESCRIPTION >
+    Returns ingestion metrics:
+        jobs_total
+        jobs_duration_avg
+        jobs_duration_p99
+    for a tinybird organization, grouped by workspace_id, job_type and status
+    job_type can be copy, populate, import, gcs_sync, s3_sync, delete
+    Use from_datetime to get metrics since a date time, otherwise it returns last 48 hours
+    In the response each metric has a description of what it means in the help column
+
 NODE jobs_stats
 SQL >
-
+    %
     SELECT
         workspace_id,
         job_type,
@@ -12,7 +22,11 @@ SQL >
         quantile(0.99)
         (date_diff('seconds', created_at, updated_at)) as p99_duration
     FROM organization.jobs_log as stats
-    where created_at > now() - interval 48 hours
+    {% if defined(from_datetime) %}
+        WHERE created_at >= toDateTime({{DateTime(from_datetime, description="timestamp >= from_datetime. Format YYYY-mm-DD HH:MM:ss")}})
+    {% else %}
+        where created_at > now() - interval 48 hours
+    {% end %}
     group by workspace_id, job_type, status
 
 
