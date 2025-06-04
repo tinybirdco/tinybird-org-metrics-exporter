@@ -9,6 +9,7 @@ DESCRIPTION >
     job_type can be copy, populate, import, gcs_sync, s3_sync, delete
     Use from_datetime to get metrics since a date time, otherwise it returns last 48 hours
     In the response each metric has a description of what it means in the help column
+    The format is compatible with Prometheus
 
 NODE jobs_stats
 SQL >
