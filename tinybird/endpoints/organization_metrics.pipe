@@ -4,6 +4,7 @@ DESCRIPTION >
     returns metrics from ingestion, storage, jobs and requests pipes
     Use from_datetime to get metrics since a date time, except totals which always sums all values
     In the response each metric has a description of what it means in the help column
+    The labels column, contains the columns by which the metrics are grouped by, including the workspace name
     The format is compatible with Prometheus
 
 NODE organization_metrics_union
