@@ -48,6 +48,11 @@ Access the Prometheus metrics endpoint at `https://api.tinybird.co/v0/pipes/orga
 POST https://api.tinybird.co/v0/tokens/?name=prometheus_org_access&description=optional&scope=PIPES:READ:organization_metrics&scope=ORG_DATASOURCES:READ
 ```
 
+- If you want to access all pipes, you'll need to include additional scopes:
+```shell
+POST https://api.tinybird.co/v0/tokens/?name=prometheus_org_access&description=optional&scope=PIPES:READ:organization_metrics&scope=PIPES:READ:ingestion&scope=PIPES:READ:storage&scope=PIPES:READ:jobs&scope=PIPES:READ:requests&scope=ORG_DATASOURCES:READ
+```
+
 To scrape the Tinybird metrics endpoint, you can configure your `prometheus.yml` file as follows:
 
 ```yaml
