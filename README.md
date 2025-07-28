@@ -1,23 +1,23 @@
 # Tinybird Organization Metrics Exporter
 
-This project uses Tinybird's [Service Data Sources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources) to aggregate and publish organizational metrics as endpoints in [Prometheus format](https://www.tinybird.co/docs/guides/integrations/consume-api-endpoints-in-prometheus-format) for quick integration with common monitoring tools.
+This project uses Tinybird's [Service Data Sources](https://www.tinybird.co/docs/forward/administration/organizations) to aggregate and publish organizational metrics as endpoints in [Prometheus format](https://www.tinybird.co/docs/forward/work-with-data/publish-data/guides/consume-api-endpoints-in-prometheus-format) for quick integration with common monitoring tools.
 
 ## Features
 
-- Includes a set of Pipes that consolidate and process organizational metrics.  
-- Exposes all key metrics through a single Pipe Endpoint in Prometheus format for streamlined monitoring.  
-- Provides essential insights to help you monitor your usage, detect anomalies, and set up alerts in critical areas such as:  
-  - Data ingestion: Track the volume and frequency of ingested data.  
-  - Pipe endpoint usage: Analyze requests and identify unusual traffic patterns.  
-  - Storage: Monitor storage usage to optimize resources and avoid limits.  
-  - Jobs: Keep track of the status and performance of scheduled jobs.  
+- Includes a set of Pipes that consolidate and process organizational metrics.
+- Exposes all key metrics through a single Pipe Endpoint in Prometheus format for streamlined monitoring.
+- Provides essential insights to help you monitor your usage, detect anomalies, and set up alerts in critical areas such as:
+  - Data ingestion: Track the volume and frequency of ingested data.
+  - Pipe endpoint usage: Analyze requests and identify unusual traffic patterns.
+  - Storage: Monitor storage usage to optimize resources and avoid limits.
+  - Jobs: Keep track of the status and performance of scheduled jobs.
 
 ## Get started
 
 ### Prerequisites
 
 1. You must have a [Tinybird organization](https://www.tinybird.co/docs/monitoring/organizations).
-2. You need to be an admin of the organization to access [organization Service Data Sources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources).
+2. You need to be an admin of the organization to access [organization Service Data Sources](https://www.tinybird.co/docs/forward/administration/organizations).
 
 ### Setup
 
@@ -33,7 +33,7 @@ tb login
 tb --cloud deploy --template https://github.com/tinybirdco/tinybird-org-metrics-exporter/tree/main/tinybird
 ```
 
-#### Use the Prometheus endpoint  
+#### Use the Prometheus endpoint
 
 Access the Prometheus metrics endpoint at `https://api.tinybird.co/v0/pipes/organization_metrics.prometheus`.
 
@@ -61,7 +61,7 @@ scrape_configs:
     scrape_interval: 15s  # Adjust the scrape interval as needed
     scheme: 'https'
     static_configs:
-      - targets: 
+      - targets:
         - 'api.tinybird.co'  # Adjust this for your region if necessary
     metrics_path: '/v0/pipes/organization_metrics.prometheus'
     bearer_token: '<admin-user-token>'  # From an Organization admin
@@ -128,4 +128,3 @@ Import the dashboard with the following steps:
 7. Select **Yes, replace**.
 
 ![Datadog dashboard example](./assets/img/datadog.png)
-
