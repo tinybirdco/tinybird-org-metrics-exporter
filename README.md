@@ -38,19 +38,10 @@ tb --cloud deploy --template https://github.com/tinybirdco/tinybird-org-metrics-
 Access the Prometheus metrics endpoint at `https://api.tinybird.co/v0/pipes/organization_metrics.prometheus`.
 
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region. See [Regions and endpoints](https://www.tinybird.co/docs/api-reference#regions-and-endpoints).
-- **Token**: for a quick check in development, you can use the pre-existing *admin `user@domain` Token* of an Organization admin to authenticate requests. But for production, the creation of a *new token* with less permissions is recommended, including these scopes:
-```
-  PIPES:READ:organization_metrics
-  ORG_DATASOURCES:READ
-```
-- As of this writing, the `ORG_DATASOURCES:READ` is not available from UI, but you can create this new **prometheus_org_access** token using tokens API like this:
-```shell
-POST https://api.tinybird.co/v0/tokens/?name=prometheus_org_access&description=optional&scope=PIPES:READ:organization_metrics&scope=ORG_DATASOURCES:READ
-```
+- **Token**: for a quick check in development, you can use the pre-existing *admin `user@domain` Token* of an Organization admin to authenticate requests. But for production, create a dedicated token with minimal permissions using the [Tinybird CLI](https://www.tinybird.co/docs/forward/get-started/administration/tokens):
 
-- If you want to access all pipes, you'll need to include additional scopes:
-```shell
-POST https://api.tinybird.co/v0/tokens/?name=prometheus_org_access&description=optional&scope=PIPES:READ:organization_metrics&scope=PIPES:READ:ingestion&scope=PIPES:READ:storage&scope=PIPES:READ:jobs&scope=PIPES:READ:requests&scope=ORG_DATASOURCES:READ
+```bash
+tb --cloud token create static prometheus_org_access --scope "WORKSPACE:READ_ALL" --scope "ORG_DATASOURCES:READ"
 ```
 
 To scrape the Tinybird metrics endpoint, you can configure your `prometheus.yml` file as follows:
@@ -64,23 +55,8 @@ scrape_configs:
       - targets:
         - 'api.tinybird.co'  # Adjust this for your region if necessary
     metrics_path: '/v0/pipes/organization_metrics.prometheus'
-    bearer_token: '<admin-user-token>'  # From an Organization admin
+    bearer_token: '<your-token>'
 ```
-
-If you use a different setup, such as Datadog and OpenMetrics, you can use the following configuration:
-
-```yaml
-instances:
-  - prometheus_url: https://api.tinybird.co/v0/pipes/organization_metrics.prometheus?token=<admin-user-token>
-    namespace: tinybird
-    metrics:
-      - "*"
-    tags:
-      - tinybird
-    max_returned_metrics: 10000 # Adjust this value as needed
-```
-
-Remember to replace `api.tinybird.co` with your Tinybird host if the Workspace is in a different region. See [Regions and endpoints](https://www.tinybird.co/docs/api-reference#regions-and-endpoints).
 
 ### Grafana quick start
 
@@ -105,15 +81,16 @@ Add the following configuration to your OpenMetrics Datadog agent `conf.yaml` fi
 
 ```yaml
 instances:
-  - prometheus_url: 'https://api.tinybird.co/v0/pipes/organization_metrics.prometheus?token=<admin-user-token>'
+  - openmetrics_endpoint: 'https://api.tinybird.co/v0/pipes/organization_metrics.prometheus'
     namespace: tinybird_org_metrics
+    headers:
+      Authorization: 'Bearer <your-token>'
     metrics:
       - "*"
     max_returned_metrics: 700000
 ```
 
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region. See [Regions and endpoints](https://www.tinybird.co/docs/api-reference#regions-and-endpoints).
-- Use the `user@domain` admin token of an Organization admin to authenticate requests.
 
 We've included a sample dashboard config for Datadog that you can use to get started. See the [JSON file](datadog/tinybird_org_metrics.json).
 
