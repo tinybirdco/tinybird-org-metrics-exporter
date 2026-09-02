@@ -1,31 +1,61 @@
-TOKEN "organization_metrics_endpoint_read" READ
-
 DESCRIPTION >
-    returns metrics from ingestion, storage, jobs and requests pipes
-    Use from_datetime to get metrics since a date time, except totals which always sums all values
+    Returns metrics from ingestion, storage, jobs, requests, cluster, data transfer,
+    sinks, LLM usage, backups, and private link Pipes.
+    Use from_datetime to get windowed ingestion, job, and request metrics since a date time.
+    Cumulative totals always sum all retained values.
     In the response each metric has a description of what it means in the help column
-    The labels column, contains the columns by which the metrics are grouped by, including the workspace name
+    The labels column contains the dimensions by which each metric is grouped.
+    Workspace-level metrics include the workspace name.
     The format is compatible with Prometheus
+
+TOKEN "organization_metrics_endpoint_read" READ
 
 NODE organization_metrics_union
 SQL >
-
-    SELECT * FROM ingestion
+    SELECT *
+    FROM ingestion
     UNION ALL
-    SELECT * from storage 
+    SELECT *
+    from storage
     UNION ALL
-    SELECT * from jobs
+    SELECT *
+    from jobs
     UNION ALL
-    SELECT * FROM requests
-
-
+    SELECT *
+    FROM requests
+    UNION ALL
+    SELECT *
+    FROM cluster
+    UNION ALL
+    SELECT *
+    FROM data_transfer
+    UNION ALL
+    SELECT *
+    FROM sinks
+    UNION ALL
+    SELECT *
+    FROM llm_usage
+    UNION ALL
+    SELECT *
+    FROM backups
+    UNION ALL
+    SELECT *
+    FROM private_link
 
 NODE organization_metrics_prometheus
 SQL >
-
-    SELECT name, type, help, value, 
-    mapConcat(labels, map('workspace', w.name)) AS labels
+    SELECT
+        name,
+        type,
+        help,
+        value,
+        if(
+            empty(metrics.workspace_id),
+            labels,
+            mapConcat(labels, map('workspace', if(empty(w.name), metrics.workspace_id, w.name)))
+        ) AS labels
     FROM organization_metrics_union as metrics
-    join organization.workspaces as w ON w.workspace_id = metrics.workspace_id
+    LEFT JOIN organization.workspaces as w ON w.workspace_id = metrics.workspace_id
+    ORDER BY name
 
-TYPE endpoint
+TYPE ENDPOINT

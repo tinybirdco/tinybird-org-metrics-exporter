@@ -1,0 +1,97 @@
+DESCRIPTION >
+    Returns cumulative request, token, duration, and cost metrics from
+    organization.llm_usage, grouped by workspace, origin, and feature.
+
+TOKEN "llm_usage_endpoint_read" READ
+
+NODE llm_usage_prometheus
+SQL >
+    SELECT
+        workspace_id,
+        metric['name'] AS name,
+        metric['type'] AS type,
+        metric['help'] AS help,
+        toFloat64(metric['value']) AS value,
+        map('workspace_id', workspace_id, 'origin', origin, 'feature', feature) AS labels
+    FROM
+        (
+            SELECT
+                workspace_id,
+                origin,
+                feature,
+                count() AS requests_total,
+                sum(prompt_tokens) AS prompt_tokens_total,
+                sum(completion_tokens) AS completion_tokens_total,
+                sum(total_tokens) AS tokens_total,
+                sum(duration) AS duration_seconds_total,
+                sum(cost) AS cost_total
+            FROM organization.llm_usage
+            GROUP BY workspace_id, origin, feature
+        )
+        ARRAY
+    JOIN
+        [
+            map(
+                'name',
+                'llm_requests_total',
+                'type',
+                'counter',
+                'help',
+                'Total LLM requests',
+                'value',
+                toString(requests_total)
+            ),
+            map(
+                'name',
+                'llm_prompt_tokens_total',
+                'type',
+                'counter',
+                'help',
+                'Total prompt tokens consumed by LLM requests',
+                'value',
+                toString(prompt_tokens_total)
+            ),
+            map(
+                'name',
+                'llm_completion_tokens_total',
+                'type',
+                'counter',
+                'help',
+                'Total completion tokens produced by LLM requests',
+                'value',
+                toString(completion_tokens_total)
+            ),
+            map(
+                'name',
+                'llm_tokens_total',
+                'type',
+                'counter',
+                'help',
+                'Total tokens consumed and produced by LLM requests',
+                'value',
+                toString(tokens_total)
+            ),
+            map(
+                'name',
+                'llm_duration_seconds_total',
+                'type',
+                'counter',
+                'help',
+                'Total duration of LLM requests in seconds',
+                'value',
+                toString(duration_seconds_total)
+            ),
+            map(
+                'name',
+                'llm_cost_total',
+                'type',
+                'counter',
+                'help',
+                'Total cost reported for LLM requests',
+                'value',
+                toString(cost_total)
+            )
+        ] AS metric
+    ORDER BY name
+
+TYPE ENDPOINT

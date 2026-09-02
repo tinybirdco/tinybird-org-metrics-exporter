@@ -89,7 +89,8 @@ SQL >
         metric['type'] as type,
         metric['help'] as help,
         toFloat64(metric['value']) as value,
-        map('datasource', datasource_name) as labels
+        map('workspace_id', workspace_id, 'datasource', datasource_name) as labels
     FROM storage_metrics
+    ORDER BY name
 
 TYPE endpoint

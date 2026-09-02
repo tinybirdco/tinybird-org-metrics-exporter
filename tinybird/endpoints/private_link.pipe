@@ -1,0 +1,102 @@
+DESCRIPTION >
+    Returns cumulative usage and cost metrics from organization.private_link,
+    grouped by the dimensions and currency reported by the provider.
+
+TOKEN "private_link_endpoint_read" READ
+
+NODE private_link_prometheus
+SQL >
+    SELECT
+        '' AS workspace_id,
+        metric['name'] AS name,
+        metric['type'] AS type,
+        metric['help'] AS help,
+        toFloat64(metric['value']) AS value,
+        map(
+            'organization_id',
+            organization_id,
+            'region',
+            region,
+            'product_code',
+            product_code,
+            'usage_type',
+            usage_type,
+            'operation',
+            operation,
+            'currency',
+            currency,
+            'product_name',
+            product_name,
+            'service_name',
+            service_name,
+            'product_family',
+            product_family,
+            'type',
+            usage_category
+        ) AS labels
+    FROM
+        (
+            SELECT
+                organization_id,
+                region,
+                product_code,
+                usage_type,
+                operation,
+                currency,
+                product_name,
+                service_name,
+                product_family,
+                type AS usage_category,
+                sum(usage_amount) AS usage_amount_total,
+                sum(cost) AS cost_total,
+                sum(blended_cost) AS blended_cost_total
+            FROM organization.private_link
+            GROUP BY
+                organization_id,
+                region,
+                product_code,
+                usage_type,
+                operation,
+                currency,
+                product_name,
+                service_name,
+                product_family,
+                usage_category
+        )
+        ARRAY
+    JOIN
+        [
+            map(
+                'name',
+                'private_link_usage_amount_total',
+                'type',
+                'counter',
+                'help',
+                'Total private link usage amount reported by the provider',
+                'value',
+                toString(usage_amount_total)
+            ),
+            map(
+                'name',
+                'private_link_cost_total',
+                'type',
+                'counter',
+                'help',
+                'Total private link cost in the reported currency',
+                'value',
+                toString(cost_total)
+            ),
+            map(
+                'name',
+                'private_link_blended_cost_total',
+                'type',
+                'counter',
+                'help',
+                'Total blended private link cost in the reported currency',
+                'value',
+                toString(blended_cost_total)
+            )
+        ] AS metric
+    ORDER BY name
+
+TYPE ENDPOINT

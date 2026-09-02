@@ -1,0 +1,119 @@
+DESCRIPTION >
+    Returns cumulative sink execution, error, duration, CPU, row, and byte metrics
+    from organization.sinks_ops_log, grouped by workspace, service, and Pipe.
+
+TOKEN "sinks_endpoint_read" READ
+
+NODE sinks_prometheus
+SQL >
+    SELECT
+        workspace_id,
+        metric['name'] AS name,
+        metric['type'] AS type,
+        metric['help'] AS help,
+        toFloat64(metric['value']) AS value,
+        map('workspace_id', workspace_id, 'service', service, 'pipe', pipe_name) AS labels
+    FROM
+        (
+            SELECT
+                workspace_id,
+                service,
+                pipe_name,
+                count() AS executions_total,
+                countIf(result != 'ok') AS errors_total,
+                sum(elapsed_time) AS elapsed_time_seconds_total,
+                sum(cpu_time) AS cpu_time_seconds_total,
+                sum(read_rows) AS read_rows_total,
+                sum(written_rows) AS written_rows_total,
+                sum(read_bytes) AS read_bytes_total,
+                sum(written_bytes) AS written_bytes_total
+            FROM organization.sinks_ops_log
+            GROUP BY workspace_id, service, pipe_name
+        )
+        ARRAY
+    JOIN
+        [
+            map(
+                'name',
+                'sinks_executions_total',
+                'type',
+                'counter',
+                'help',
+                'Total sink executions',
+                'value',
+                toString(executions_total)
+            ),
+            map(
+                'name',
+                'sinks_errors_total',
+                'type',
+                'counter',
+                'help',
+                'Total failed sink executions',
+                'value',
+                toString(errors_total)
+            ),
+            map(
+                'name',
+                'sinks_elapsed_time_seconds_total',
+                'type',
+                'counter',
+                'help',
+                'Total elapsed time spent executing sinks in seconds',
+                'value',
+                toString(elapsed_time_seconds_total)
+            ),
+            map(
+                'name',
+                'sinks_cpu_time_seconds_total',
+                'type',
+                'counter',
+                'help',
+                'Total CPU time spent executing sinks in seconds',
+                'value',
+                toString(cpu_time_seconds_total)
+            ),
+            map(
+                'name',
+                'sinks_read_rows_total',
+                'type',
+                'counter',
+                'help',
+                'Total rows read by sinks',
+                'value',
+                toString(read_rows_total)
+            ),
+            map(
+                'name',
+                'sinks_written_rows_total',
+                'type',
+                'counter',
+                'help',
+                'Total rows written by sinks',
+                'value',
+                toString(written_rows_total)
+            ),
+            map(
+                'name',
+                'sinks_read_bytes_total',
+                'type',
+                'counter',
+                'help',
+                'Total bytes read by sinks',
+                'value',
+                toString(read_bytes_total)
+            ),
+            map(
+                'name',
+                'sinks_written_bytes_total',
+                'type',
+                'counter',
+                'help',
+                'Total bytes written by sinks',
+                'value',
+                toString(written_bytes_total)
+            )
+        ] AS metric
+    ORDER BY name
+
+TYPE ENDPOINT

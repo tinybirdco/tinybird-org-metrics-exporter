@@ -1,0 +1,42 @@
+DESCRIPTION >
+    Returns the total bytes tracked by organization.data_transfer as a Prometheus counter,
+    grouped by workspace, event, providers, regions, and transfer kind.
+
+TOKEN "data_transfer_endpoint_read" READ
+
+NODE data_transfer_prometheus
+SQL >
+    SELECT
+        workspace_id,
+        'data_transfer_bytes_total' AS name,
+        'counter' AS type,
+        'Total bytes transferred between providers and regions' AS help,
+        toFloat64(sum(bytes)) AS value,
+        map(
+            'workspace_id',
+            workspace_id,
+            'event',
+            event,
+            'origin_provider',
+            origin_provider,
+            'origin_region',
+            origin_region,
+            'destination_provider',
+            destination_provider,
+            'destination_region',
+            destination_region,
+            'kind',
+            kind
+        ) AS labels
+    FROM organization.data_transfer
+    GROUP BY
+        workspace_id,
+        event,
+        origin_provider,
+        origin_region,
+        destination_provider,
+        destination_region,
+        kind
+    ORDER BY name
+
+TYPE ENDPOINT

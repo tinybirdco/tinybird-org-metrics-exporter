@@ -86,7 +86,8 @@ SQL >
         metric['type'] as type,
         metric['help'] as help,
         toFloat64(metric['value']) as value,
-        map('job_type', job_type, 'status', status) as labels
+        map('workspace_id', workspace_id, 'job_type', job_type, 'status', status) as labels
     FROM jobs_metrics
+    ORDER BY name
 
 TYPE endpoint

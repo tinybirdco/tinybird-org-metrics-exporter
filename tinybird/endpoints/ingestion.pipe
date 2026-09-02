@@ -313,7 +313,7 @@ SQL >
         metric_ingestion_total['type'] as type,
         metric_ingestion_total['help'] as help,
         toFloat64(metric_ingestion_total['value']) as value,
-        map('event_type', event_type, 'pipe', pipe_name) as labels
+        map('workspace_id', workspace_id, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals_metrics
     UNION ALL
     SELECT
@@ -322,7 +322,7 @@ SQL >
         metric_ingestion_kafka['type'] as type,
         metric_ingestion_kafka['help'] as help,
         toFloat64(metric_ingestion_kafka['value']) as value,
-        map('topic', topic) as labels
+        map('workspace_id', workspace_id, 'topic', topic) as labels
     FROM ingestion_kafka_metrics
     UNION ALL
     SELECT
@@ -331,7 +331,8 @@ SQL >
         metric_ingestion_latency_5m['type'] as type,
         metric_ingestion_latency_5m['help'] as help,
         toFloat64(metric_ingestion_latency_5m['value']) as value,
-        map('event_type', event_type, 'pipe', pipe_name) as labels
+        map('workspace_id', workspace_id, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_5m_metrics
+    ORDER BY name
 
 TYPE endpoint

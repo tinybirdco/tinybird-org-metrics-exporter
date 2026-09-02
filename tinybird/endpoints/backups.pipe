@@ -1,0 +1,120 @@
+DESCRIPTION >
+    Returns cumulative backup counts and gauges for the latest backup tracked by
+    organization.backups, grouped by organization, cluster, status, and backup type.
+
+TOKEN "backups_endpoint_read" READ
+
+NODE backups_prometheus
+SQL >
+    SELECT
+        '' AS workspace_id,
+        metric['name'] AS name,
+        metric['type'] AS type,
+        metric['help'] AS help,
+        toFloat64(metric['value']) AS value,
+        map(
+            'organization_id',
+            organization_id,
+            'cluster',
+            cluster,
+            'status',
+            status,
+            'full',
+            toString(is_full_backup)
+        ) AS labels
+    FROM
+        (
+            SELECT
+                organization_id,
+                cluster,
+                status,
+                is_full_backup,
+                count() AS backups_total,
+                argMax(toUnixTimestamp(start_time), start_time) AS last_start_timestamp_seconds,
+                argMax(toUnixTimestamp(end_time), start_time) AS last_end_timestamp_seconds,
+                argMax(
+                    dateDiff('millisecond', start_time, end_time) / 1000.0, start_time
+                ) AS last_duration_seconds,
+                argMax(total_size, start_time) AS last_total_size_bytes,
+                argMax(compressed_size, start_time) AS last_compressed_size_bytes,
+                argMax(uncompressed_size, start_time) AS last_uncompressed_size_bytes
+            FROM organization.backups
+            GROUP BY organization_id, cluster, status, is_full_backup
+        )
+        ARRAY
+    JOIN
+        [
+            map(
+                'name',
+                'backups_total',
+                'type',
+                'counter',
+                'help',
+                'Total backups',
+                'value',
+                toString(backups_total)
+            ),
+            map(
+                'name',
+                'backup_last_start_timestamp_seconds',
+                'type',
+                'gauge',
+                'help',
+                'Unix timestamp of the latest backup start',
+                'value',
+                toString(last_start_timestamp_seconds)
+            ),
+            map(
+                'name',
+                'backup_last_end_timestamp_seconds',
+                'type',
+                'gauge',
+                'help',
+                'Unix timestamp of the latest backup end',
+                'value',
+                toString(last_end_timestamp_seconds)
+            ),
+            map(
+                'name',
+                'backup_last_duration_seconds',
+                'type',
+                'gauge',
+                'help',
+                'Duration of the latest backup in seconds',
+                'value',
+                toString(last_duration_seconds)
+            ),
+            map(
+                'name',
+                'backup_last_total_size_bytes',
+                'type',
+                'gauge',
+                'help',
+                'Total size reported for the latest backup in bytes',
+                'value',
+                toString(last_total_size_bytes)
+            ),
+            map(
+                'name',
+                'backup_last_compressed_size_bytes',
+                'type',
+                'gauge',
+                'help',
+                'Compressed size of the latest backup in bytes',
+                'value',
+                toString(last_compressed_size_bytes)
+            ),
+            map(
+                'name',
+                'backup_last_uncompressed_size_bytes',
+                'type',
+                'gauge',
+                'help',
+                'Uncompressed size of the latest backup in bytes',
+                'value',
+                toString(last_uncompressed_size_bytes)
+            )
+        ] AS metric
+    ORDER BY name
+
+TYPE ENDPOINT
