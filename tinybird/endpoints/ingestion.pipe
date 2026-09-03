@@ -30,7 +30,6 @@ SQL >
     SELECT
         workspace_id,
         event_type,
-        pipe_id,
         pipe_name,
         sum(executions) as executions_total,
         sum(error_count) as errors_total,
@@ -45,7 +44,7 @@ SQL >
         event_type in [
             'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
         ]
-    group by workspace_id, event_type, pipe_id, pipe_name
+    group by workspace_id, event_type, pipe_name
 
 
 
@@ -69,7 +68,7 @@ SQL >
     AND event_type in [
             'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
         ]
-    GROUP BY workspace_id, event_type, pipe_id, pipe_name
+    GROUP BY workspace_id, event_type, pipe_name
 
 
 
