@@ -214,7 +214,7 @@ SQL >
         metric_requests_total['type'] as type,
         metric_requests_total['help'] as help,
         toFloat64(metric_requests_total['value']) as value,
-        map('pipe', pipe_name) as labels
+        map('workspace_id', workspace_id, 'pipe', pipe_name) as labels
     FROM requests_totals_metrics
     UNION ALL
     SELECT
@@ -223,8 +223,8 @@ SQL >
         metric_requests_5m['type'] as type,
         metric_requests_5m['help'] as help,
         toFloat64(metric_requests_5m['value']) as value,
-        map('pipe', pipe_name) as labels
+        map('workspace_id', workspace_id, 'pipe', pipe_name) as labels
     FROM requests_5m_metrics
+    ORDER BY name
 
 TYPE endpoint
-

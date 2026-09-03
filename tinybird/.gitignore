@@ -1,2 +1,3 @@
 .tinyb
 .terraform
+.env.local

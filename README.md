@@ -11,6 +11,12 @@ This project uses Tinybird's [Service Data Sources](https://www.tinybird.co/docs
   - Pipe endpoint usage: Analyze requests and identify unusual traffic patterns.
   - Storage: Monitor storage usage to optimize resources and avoid limits.
   - Jobs: Keep track of the status and performance of scheduled jobs.
+  - Cluster health: Export every metric tracked by `organization.metrics_logs` per cluster host.
+  - Data transfer: Track transferred bytes by provider, region, event, and transfer kind.
+  - Sinks: Monitor executions, errors, duration, CPU, rows, and bytes by Sink Pipe.
+  - LLM usage: Track requests, tokens, duration, and cost by feature and origin.
+  - Backups: Monitor backup counts and the status, duration, and size of the latest backup.
+  - Private Link: Track provider-reported usage and cost.
 
 ## Get started
 
@@ -36,6 +42,18 @@ tb --cloud deploy --template https://github.com/tinybirdco/tinybird-org-metrics-
 #### Use the Prometheus endpoint
 
 Access the Prometheus metrics endpoint at `https://api.tinybird.co/v0/pipes/organization_metrics.prometheus`.
+
+The combined endpoint includes all metrics. Each category is also available as an
+individual Prometheus endpoint:
+
+| Endpoint | Source |
+| --- | --- |
+| `cluster` | `organization.metrics_logs` |
+| `data_transfer` | `organization.data_transfer` |
+| `sinks` | `organization.sinks_ops_log` |
+| `llm_usage` | `organization.llm_usage` |
+| `backups` | `organization.backups` |
+| `private_link` | `organization.private_link` |
 
 - Replace `api.tinybird.co` with your Tinybird host if the workspace is in a different region. See [Regions and endpoints](https://www.tinybird.co/docs/api-reference#regions-and-endpoints).
 - **Token**: for a quick check in development, you can use the pre-existing *admin `user@domain` Token* of an Organization admin to authenticate requests. But for production, create a dedicated token with minimal permissions using the [Tinybird CLI](https://www.tinybird.co/docs/forward/get-started/administration/tokens):

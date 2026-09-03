@@ -30,7 +30,6 @@ SQL >
     SELECT
         workspace_id,
         event_type,
-        pipe_id,
         pipe_name,
         sum(executions) as executions_total,
         sum(error_count) as errors_total,
@@ -45,7 +44,7 @@ SQL >
         event_type in [
             'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
         ]
-    group by workspace_id, event_type, pipe_id, pipe_name
+    group by workspace_id, event_type, pipe_name
 
 
 
@@ -69,7 +68,7 @@ SQL >
     AND event_type in [
             'append', 'append-hfi', 'append-kafka', 'append-dynamodb', 'replace', 'populateview', 'copy'
         ]
-    GROUP BY workspace_id, event_type, pipe_id, pipe_name
+    GROUP BY workspace_id, event_type, pipe_name
 
 
 
@@ -313,7 +312,7 @@ SQL >
         metric_ingestion_total['type'] as type,
         metric_ingestion_total['help'] as help,
         toFloat64(metric_ingestion_total['value']) as value,
-        map('event_type', event_type, 'pipe', pipe_name) as labels
+        map('workspace_id', workspace_id, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_totals_metrics
     UNION ALL
     SELECT
@@ -322,7 +321,7 @@ SQL >
         metric_ingestion_kafka['type'] as type,
         metric_ingestion_kafka['help'] as help,
         toFloat64(metric_ingestion_kafka['value']) as value,
-        map('topic', topic) as labels
+        map('workspace_id', workspace_id, 'topic', topic) as labels
     FROM ingestion_kafka_metrics
     UNION ALL
     SELECT
@@ -331,7 +330,8 @@ SQL >
         metric_ingestion_latency_5m['type'] as type,
         metric_ingestion_latency_5m['help'] as help,
         toFloat64(metric_ingestion_latency_5m['value']) as value,
-        map('event_type', event_type, 'pipe', pipe_name) as labels
+        map('workspace_id', workspace_id, 'event_type', event_type, 'pipe', pipe_name) as labels
     FROM ingestion_latency_5m_metrics
+    ORDER BY name
 
 TYPE endpoint

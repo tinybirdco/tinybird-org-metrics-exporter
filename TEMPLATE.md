@@ -1,5 +1,10 @@
 This Org Metrics Exporter template uses Tinybird's [Service Data Sources](https://www.tinybird.co/docs/monitoring/organizations#organization-service-data-sources) to aggregate and publish organizational metrics as endpoints in [Prometheus format](https://www.tinybird.co/docs/forward/work-with-data/publish-data/guides/consume-api-endpoints-in-prometheus-format) for quick integration with common monitoring tools.
 
+It exports ingestion, request, storage, job, cluster, data transfer, Sink, LLM
+usage, backup, and Private Link metrics. The `organization_metrics` endpoint
+combines every category, while `cluster`, `data_transfer`, `sinks`,
+`llm_usage`, `backups`, and `private_link` can be scraped independently.
+
 ## Set up the project
 
 ```bash

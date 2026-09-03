@@ -2,7 +2,7 @@ TOKEN "jobs_endpoint_read" READ
 
 DESCRIPTION >
     Returns ingestion metrics:
-        jobs_total
+        jobs_in_window
         jobs_duration_avg
         jobs_duration_p99
     for a tinybird organization, grouped by workspace_id, job_type and status
@@ -43,7 +43,7 @@ SQL >
             [
                 map(
                     'name',
-                    'jobs_total',
+                    'jobs_in_window',
                     'type',
                     'gauge',
                     'help',
@@ -86,7 +86,8 @@ SQL >
         metric['type'] as type,
         metric['help'] as help,
         toFloat64(metric['value']) as value,
-        map('job_type', job_type, 'status', status) as labels
+        map('workspace_id', workspace_id, 'job_type', job_type, 'status', status) as labels
     FROM jobs_metrics
+    ORDER BY name
 
 TYPE endpoint

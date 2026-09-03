@@ -1,0 +1,36 @@
+DESCRIPTION >
+    Returns every host metric tracked by organization.metrics_logs.
+    Each series contains the latest sampled value and is exposed as a Prometheus gauge,
+    grouped by organization, cluster, and host.
+
+TOKEN "cluster_endpoint_read" READ
+
+NODE cluster_prometheus
+SQL >
+    SELECT
+        '' AS workspace_id,
+        CAST(
+            if(
+                metric = 'OSMemoryTotal',
+                'cluster_os_memory_bytes',
+                concat(
+                    'cluster_',
+                    lower(
+                        replaceRegexpAll(
+                            replaceRegexpAll(metric, '([A-Z]+)([A-Z][a-z])', '\\1_\\2'),
+                            '([a-z0-9])([A-Z])',
+                            '\\1_\\2'
+                        )
+                    )
+                )
+            ) AS String
+        ) AS name,
+        'gauge' AS type,
+        argMax(description, timestamp) AS help,
+        argMax(toFloat64(value), timestamp) AS value,
+        map('organization_id', organization_id, 'cluster', cluster, 'host', host) AS labels
+    FROM organization.metrics_logs
+    GROUP BY organization_id, cluster, host, metric
+    ORDER BY name
+
+TYPE ENDPOINT
