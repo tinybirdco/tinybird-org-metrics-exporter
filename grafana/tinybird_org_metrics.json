@@ -1226,7 +1226,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "jobs_in_window{workspace=~\"$workspace\", job=\"oa_metrics\", status=\"error\"}",
+          "expr": "jobs_in_window{workspace=~\"$workspace\", job=\"tinybird_org_metrics\", status=\"error\"}",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
